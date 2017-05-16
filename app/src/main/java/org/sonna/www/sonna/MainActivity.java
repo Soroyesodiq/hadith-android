@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -163,35 +164,12 @@ public class MainActivity extends AppCompatActivity
 		return super.onOptionsItemSelected(item);
 	}
 
-//	@Override
-//	public boolean onNavigationItemSelected(MenuItem item) {
-//		// Handle navigation view item clicks here.
-//		int id = item.getItemId();
-//
-//		if (id == R.id.nav_home_screen) {
-//			historyStack.push(curPageId);
-//			displayKids("", "");
-//			displayContent("", "");
-//		} else if (id == R.id.nav_search) {
-//			TextView msgTextView = (TextView) findViewById(R.id.textViewDisplay);
-//			msgTextView.setVisibility(View.GONE);
-//
-//		} else if (id == R.id.nav_about_us) {
-//			TextView msgTextView = (TextView) findViewById(R.id.textViewDisplay);
-//			msgTextView.setVisibility(View.VISIBLE);
-//		}
-//
-//		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//		drawer.closeDrawer(GravityCompat.START);
-//		return true;
-//	}
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void displayPreviousContents() {
 		String page_id = historyStack.pop();
 
-		TextView display = (TextView) findViewById(R.id.textViewDisplay);
+		WebView display = (WebView) findViewById(R.id.textViewDisplay);
 		ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
 		if (dbHelper.IsLeafItem(curBookCode, page_id)) {
@@ -200,9 +178,14 @@ public class MainActivity extends AppCompatActivity
 			displayContent(curBookCode, page_id, "");
 		} else {
 			display.setVisibility(View.GONE);
+			emptyDisplay(display);
 			tabweeb.setVisibility(View.VISIBLE);
 			displayKids(curBookCode, page_id);
 		}
+	}
+
+	private void emptyDisplay(WebView display) {
+		display.loadData("", "text/html; charset=UTF-8", null);
 	}
 
 	String curBookCode = "", curPageId = "";
@@ -211,7 +194,7 @@ public class MainActivity extends AppCompatActivity
 
 	protected void displayContent(String book_code, String page_id, String searchWords) {
 		try {
-			TextView displayTextView = (TextView) findViewById(R.id.textViewDisplay);
+			WebView displayTextView = (WebView) findViewById(R.id.textViewDisplay);
 			displayTextView.setOnTouchListener(new View.OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
@@ -220,7 +203,9 @@ public class MainActivity extends AppCompatActivity
 			});
 			ArrayList<DbRecord> records = dbHelper.getDisplayData(book_code, page_id);
 			if (records.size() != 1) {
-				displayTextView.setText(Html.fromHtml("")); //just empty
+//				displayTextView.setText(Html.fromHtml("")); //just empty
+				emptyDisplay(displayTextView);
+
 			} else {
 				DbRecord record = records.get(0);
 				String content = record.page;
@@ -232,9 +217,13 @@ public class MainActivity extends AppCompatActivity
 				}
 
 				//Add title
-				content = "<font color=\"blue\">" + record.title + "</font><hr><br><br>" + content;
+				content = "<font color=\"blue\">" + record.title + "</font><hr>" + content;
+				String htmlPagePrefix = "<html><body style='direction: rtl; text-align:justify; align-content: right;  text-align=right'><span align='right'>";
+				String htmlPagePostfix = "</span></body><html>";
+				String htmlContent = htmlPagePrefix + content + htmlPagePostfix;
+//				displayTextView.setText(Html.fromHtml(content));
+				displayTextView.loadData(htmlContent, "text/html; charset=UTF-8", null);
 
-				displayTextView.setText(Html.fromHtml(content));
 				curBookCode = record.book_code;
 				curPageId = record.page_id;
 			}
@@ -269,7 +258,7 @@ public class MainActivity extends AppCompatActivity
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					DbRecord record = curRecords.get(position);
 					historyStack.push(curPageId); //is going to change per user click
-					TextView display = (TextView) findViewById(R.id.textViewDisplay);
+					WebView display = (WebView) findViewById(R.id.textViewDisplay);
 					ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
 					if (dbHelper.IsLeafItem(record.book_code, record.page_id)) {
@@ -278,6 +267,7 @@ public class MainActivity extends AppCompatActivity
 						displayContent(record.book_code, record.page_id, "");
 					} else {
 						display.setVisibility(View.GONE);
+						emptyDisplay(display);
 						tabweeb.setVisibility(View.VISIBLE);
 						displayKids(record.book_code, record.page_id);
 
