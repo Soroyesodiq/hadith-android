@@ -13,13 +13,13 @@ public class DatabaseAdaptor {
 
 	protected static final String LOG_TAG = "DatabaseAdaptor";
 
-	private final Context mContext;
+//	private final Context mContext;
 	private SQLiteDatabase mDb;
 	private DatabaseInstaller mDbHelper;
 
 	public DatabaseAdaptor(Context context) {
-		this.mContext = context;
-		mDbHelper = new DatabaseInstaller(mContext);
+//		this.mContext = context;
+		mDbHelper = new DatabaseInstaller(context);
 	}
 
 	public DatabaseAdaptor install() throws SQLException {
@@ -101,7 +101,7 @@ public class DatabaseAdaptor {
 
 	public ArrayList<DbRecord> search(String terms, int pageLength, int pageNo) {
 		String sql = "SELECT * FROM pages where pages MATCH ? order by book_code,page_id LIMIT ? OFFSET ? ";
-		String book_code = ""; //search all books
+//		String book_code = ""; //search all books
 //		String ftsQuery = strf("book_code:{0} {1}", book_code, modifiedQuery);
 //		String ftsQuery = new Formatter().format("book_code:%s %s", book_code, terms).toString();
 //		String ftsQuery = new Formatter().format("%s", book_code, terms).toString();

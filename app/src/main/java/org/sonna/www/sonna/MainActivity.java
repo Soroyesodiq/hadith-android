@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	String  processArabicWord(String arabic) {
-		String wordBoundary = "[ .\\(\\),،\\-]+";
+//		String wordBoundary = "[ .\\(\\),،\\-]+";
 //		Python line of code
 //		word_boundary_re = u'[ ;:,،.«»\'\"\\(\\)\\-\\{\\}\\<\\>]'  # Just one character must exist (+ is one or more)
 
