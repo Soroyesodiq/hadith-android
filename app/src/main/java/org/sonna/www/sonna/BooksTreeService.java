@@ -13,10 +13,10 @@ public class BooksTreeService {
 	static final String LOG_TAG = "BooksTreeService";
 
 	private SQLiteDatabase mDb;
-	private DatabaseInstaller mDbHelper;
+	private SQLiteInstaller mDbHelper;
 
 	BooksTreeService(Context context) {
-		mDbHelper = new DatabaseInstaller(context);
+		mDbHelper = new SQLiteInstaller(context);
 	}
 
 	public BooksTreeService install() throws DatabaseCopyException {

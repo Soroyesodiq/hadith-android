@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
 		//FIXME: Use this instead of getting Context because activity is already extends Context
 		Context context = getApplicationContext();
-		DatabaseInstaller db = new DatabaseInstaller(context);
+		SQLiteInstaller db = new SQLiteInstaller(context);
 
 //		ProgressDialog hourGlassDlg = new ProgressDialog(this);
 //		hourGlassDlg.setMessage("برجاء الإنتظار");
