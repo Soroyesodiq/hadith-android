@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 public class Content {
 
-    private static String processArabicWord(String arabic) {
+    private static String addVowels(String arabic) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < arabic.length(); i++) {
             result.append(arabic.charAt(i));
@@ -22,7 +22,7 @@ public class Content {
         for (String word : highlightWords.split(" ")) {
             word = word.trim();
             if (word.length() > 0) {
-                String processedWord = processArabicWord(word);
+                String processedWord = addVowels(word);
                 bodyString = bodyString.replaceAll("(" + processedWord + ")", spanStart + "$1" + spanEnd);
             }
         }
