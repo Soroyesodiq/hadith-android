@@ -21,7 +21,7 @@ public class DatabaseInstaller extends SQLiteOpenHelper {
 	private SQLiteDatabase mDataBase;
 	private final Context mContext;
 
-	public DatabaseInstaller(Context context) {
+	DatabaseInstaller(Context context) {
 		super(context, DB_NAME, null, 1);// 1? Its database Version
 		if (android.os.Build.VERSION.SDK_INT >= 17) {
 			DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
@@ -31,7 +31,7 @@ public class DatabaseInstaller extends SQLiteOpenHelper {
 		this.mContext = context;
 	}
 
-	public void install() throws IOException {
+	public void install() {
 		boolean mDataBaseExist = isDatabaseExist();
 		if (!mDataBaseExist) {
 			this.getReadableDatabase();
@@ -56,7 +56,7 @@ public class DatabaseInstaller extends SQLiteOpenHelper {
 		InputStream mInput = mContext.getAssets().open(DB_NAME);
 		String outFileName = DB_PATH + DB_NAME;
 		OutputStream mOutput = new FileOutputStream(outFileName);
-		byte[] mBuffer = new byte[1024];
+		byte[] mBuffer = new byte[10*1024];
 		int mLength;
 		while ((mLength = mInput.read(mBuffer)) > 0) {
 			mOutput.write(mBuffer, 0, mLength);
