@@ -11,13 +11,13 @@ import java.util.Formatter;
 
 public class DatabaseAdaptor {
 
-	protected static final String LOG_TAG = "DatabaseAdaptor";
+	static final String LOG_TAG = "DatabaseAdaptor";
 
 //	private final Context mContext;
 	private SQLiteDatabase mDb;
 	private DatabaseInstaller mDbHelper;
 
-	public DatabaseAdaptor(Context context) {
+	DatabaseAdaptor(Context context) {
 //		this.mContext = context;
 		mDbHelper = new DatabaseInstaller(context);
 	}
@@ -28,14 +28,9 @@ public class DatabaseAdaptor {
 	}
 
 	public DatabaseAdaptor open() throws SQLException {
-		try {
-			mDbHelper.openDataBase();
-			mDbHelper.close();
-			mDb = mDbHelper.getReadableDatabase();
-		} catch (SQLException mSQLException) {
-			Log.e(LOG_TAG, "open >>" + mSQLException.toString());
-			throw mSQLException;
-		}
+		mDbHelper.openDataBase();
+		mDbHelper.close();
+		mDb = mDbHelper.getReadableDatabase();
 		return this;
 	}
 
