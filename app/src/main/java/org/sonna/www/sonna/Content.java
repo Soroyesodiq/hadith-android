@@ -6,17 +6,15 @@ public class Content {
 
     private static String processArabicWord(String arabic) {
         StringBuilder result = new StringBuilder();
-        //unicode diacritics letters from url,
-        //http://unicode.org/charts/PDF/U0600.pdf
-        String vowels = "[\u064B-\u065F]*";
-
         for (int i = 0; i < arabic.length(); i++) {
             result.append(arabic.charAt(i));
-            result.append(vowels);
+            result.append("[\u064B-\u065F]*"); //vowels
+            //unicode vowels letters from url: http://unicode.org/charts/PDF/U0600.pdf
         }
         return result.toString();
     }
 
+    @NonNull
     public static String highlight(String bodyString, String highlightWords) {
         final String spanStart = "<font color=\"red\">";
         final String spanEnd = "</font>";
@@ -53,14 +51,16 @@ public class Content {
         return htmlPagePrefix + content + htmlPagePostfix;
     }
 
-    @NonNull static String removeTrailingHashes(@NonNull String content) {
+    @NonNull
+    static String removeTrailingHashes(@NonNull String content) {
         if(content.charAt(content.length()-1) == '#') {
             return content.substring(0, content.length()-2);
         }
         return content;
     }
 
-    @NonNull static String removeTrailingDot(@NonNull String content) {
+    @NonNull
+    static String removeTrailingDot(@NonNull String content) {
         if(content.charAt(content.length()-1) == '.') {
             return content.substring(0, content.length()-1);
         }
