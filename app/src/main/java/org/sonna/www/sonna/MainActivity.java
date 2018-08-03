@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity
 
 		try {
 			db.install();
-		} catch (IOException exception) {
+		} catch (DatabaseCopyException exception) {
 			Log.e(LOG_TAG, "open >>" + exception.toString());
+            showErrorDialogue("خطأ في العمل", "يوجد خطأ في تهيئة العمل علي ملف البيانات.", exception);
 		}
 
 //		hourGlassDlg.hide();
@@ -192,7 +193,6 @@ public class MainActivity extends AppCompatActivity
 			}
 		} catch (Exception exception) {
 			Log.e(LOG_TAG, "exception", exception);
-			showErrorDialogue();
 		}
 	}
 
@@ -239,15 +239,16 @@ public class MainActivity extends AppCompatActivity
 			});
 		} catch (Exception exception) {
 			Log.e(LOG_TAG, "exception", exception);
-			showErrorDialogue();
+			showErrorDialogue("خطأ", "خطأ في عرض البيانات.", exception);
 
 		}
 	}
 
-	void showErrorDialogue() {
-		AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-		alertDialog.setTitle("Error");
-		alertDialog.setMessage("Unable to complete operation due to internal error!");
+	void showErrorDialogue(String title, String body, Throwable exp) {
+        Log.e(LOG_TAG, "fatal error", exp);
+	    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+		alertDialog.setTitle(title);
+		alertDialog.setMessage(body);
 		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
@@ -381,6 +382,5 @@ public class MainActivity extends AppCompatActivity
 		});
 		aboutAlert.show();
 	}
-
 
 }

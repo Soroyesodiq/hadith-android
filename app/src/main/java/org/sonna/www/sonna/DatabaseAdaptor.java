@@ -22,13 +22,8 @@ public class DatabaseAdaptor {
 		mDbHelper = new DatabaseInstaller(context);
 	}
 
-	public DatabaseAdaptor install() throws SQLException {
-		try {
-			mDbHelper.install();
-		} catch (IOException mIOException) {
-			Log.e(LOG_TAG, mIOException.toString() + "  UnableToCreateDatabase");
-			throw new Error("UnableToCreateDatabase");
-		}
+	public DatabaseAdaptor install() throws DatabaseCopyException {
+        mDbHelper.install();
 		return this;
 	}
 

@@ -31,7 +31,7 @@ public class DatabaseInstaller extends SQLiteOpenHelper {
 		this.mContext = context;
 	}
 
-	public void install() {
+	public void install() throws DatabaseCopyException{
 		boolean mDataBaseExist = isDatabaseExist();
 		if (!mDataBaseExist) {
 			this.getReadableDatabase();
@@ -41,7 +41,7 @@ public class DatabaseInstaller extends SQLiteOpenHelper {
 				copyDataBaseFromAssets();
 				Log.e(LOG_TAG, "finished database copy");
 			} catch (IOException mIOException) {
-				throw new Error("ErrorCopyingDataBase");
+				throw new DatabaseCopyException("ErrorCopyingDataBase", mIOException);
 			}
 		}
 	}
