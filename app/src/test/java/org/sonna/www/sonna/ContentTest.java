@@ -11,7 +11,7 @@ public class ContentTest {
 
 
 	@Test
-	public void testSearchHighlight() throws Exception {
+	public void testSearchHighlight() {
 		String text =  "besm ellah ";
 		String textHighlighted = "besm <font color=\"red\">ellah</font> ";
 		assertEquals(textHighlighted, Content.highlight(text, "ellah"));
@@ -24,4 +24,16 @@ public class ContentTest {
 		final String content2 = "some test message ";
 		assertEquals(content2, Content.removeTrailingHashes(content));
 	}
+
+	@Test
+	public void testReplacement() {
+
+		final String content = "word1 word2 word3";
+		final String content2 = "word1 |word2| word3";
+		String newString = content.replaceAll("(word2)", "<$1>");
+		assertEquals(newString, content2);
+
+	}
+
+
 }

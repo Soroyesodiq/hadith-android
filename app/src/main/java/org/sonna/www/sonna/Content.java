@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 public class Content {
 
     private static String processArabicWord(String arabic) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         //unicode diacritics letters from url,
         //http://unicode.org/charts/PDF/U0600.pdf
         String vowels = "[\u064B-\u065F]*";
@@ -25,7 +25,7 @@ public class Content {
             word = word.trim();
             if (word.length() > 0) {
                 String processedWord = processArabicWord(word);
-                bodyString = bodyString.replaceAll("(" + processedWord + ")", spanStart + word + spanEnd);
+                bodyString = bodyString.replaceAll("(" + processedWord + ")", spanStart + "$1" + spanEnd);
             }
         }
         return bodyString;
@@ -34,8 +34,6 @@ public class Content {
 
     @NonNull
     static String decorate(@NonNull String searchWords, @NonNull String title, @NonNull String content) {
-
-        
 
         content = content.trim();
         content = removeTrailingHashes(content);
