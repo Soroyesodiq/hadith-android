@@ -8,25 +8,23 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.Formatter;
 
-public class DatabaseAdaptor {
+public class BooksTreeService {
 
-	static final String LOG_TAG = "DatabaseAdaptor";
+	static final String LOG_TAG = "BooksTreeService";
 
-//	private final Context mContext;
 	private SQLiteDatabase mDb;
 	private DatabaseInstaller mDbHelper;
 
-	DatabaseAdaptor(Context context) {
-//		this.mContext = context;
+	BooksTreeService(Context context) {
 		mDbHelper = new DatabaseInstaller(context);
 	}
 
-	public DatabaseAdaptor install() throws DatabaseCopyException {
+	public BooksTreeService install() throws DatabaseCopyException {
         mDbHelper.install();
 		return this;
 	}
 
-	public DatabaseAdaptor open() throws SQLException {
+	public BooksTreeService open() throws SQLException {
 		mDbHelper.openDataBase();
 		mDbHelper.close();
 		mDb = mDbHelper.getReadableDatabase();
@@ -37,11 +35,11 @@ public class DatabaseAdaptor {
 		mDbHelper.close();
 	}
 
-	private ArrayList<TreeNode> selectData(String sql, String args[]) {
+	private ArrayList<BooksTreeNode> selectData(String sql, String args[]) {
 		Cursor cursor = mDb.rawQuery(sql, args);
-		ArrayList<TreeNode> out = new ArrayList<>();
+		ArrayList<BooksTreeNode> out = new ArrayList<>();
 		while (cursor != null && cursor.moveToNext()) {
-			TreeNode record = new TreeNode();
+			BooksTreeNode record = new BooksTreeNode();
 			record.page_id = cursor.getString(0);
 			record.parent_id = cursor.getString(1);
 			record.book_code = cursor.getString(2);
@@ -49,19 +47,21 @@ public class DatabaseAdaptor {
 			record.page = cursor.getString(4);
 			out.add(record);
 		}
-		if(cursor!= null) cursor.close();
+		if(cursor!= null) {
+		    cursor.close();
+        }
 		return out;
 	}
 
 
-	public ArrayList<TreeNode> getDisplayData(String book_code, String page_id) {
+	public ArrayList<BooksTreeNode> getDisplayData(String book_code, String page_id) {
 		String sql = "SELECT * FROM pages where pages MATCH ?";
 		String params = new Formatter().format("book_code:%s page_id:%s", book_code, page_id).toString();
 		String args[] = new String[]{params};
 		return selectData(sql, args);
 	}
 
-	public ArrayList<TreeNode> getKidsData(String book_code, String page_id) {
+	public ArrayList<BooksTreeNode> getKidsData(String book_code, String page_id) {
 		String args[];
 		String sql;
 		if ("".equals(page_id)) {
@@ -84,21 +84,19 @@ public class DatabaseAdaptor {
 		String[] args = new String[]{param};
 		Cursor cursor = mDb.rawQuery(sql, args);
 		boolean existKids = (cursor != null && cursor.moveToNext());
-		if(cursor!= null) cursor.close();
+		if(cursor!= null) {
+			cursor.close();
+		}
 		return ( ! existKids );
 	}
 
-	public ArrayList<TreeNode> search(String terms, int pageLength, int pageNo) {
+	public ArrayList<BooksTreeNode> search(String terms, int pageLength, int pageNo) {
 		String sql = "SELECT * FROM pages where pages MATCH ? order by book_code,page_id LIMIT ? OFFSET ? ";
-//		String book_code = ""; //search all books
-//		String ftsQuery = strf("book_code:{0} {1}", book_code, modifiedQuery);
-//		String ftsQuery = new Formatter().format("book_code:%s %s", book_code, terms).toString();
-//		String ftsQuery = new Formatter().format("%s", book_code, terms).toString();
 		String args[] = {terms, String.valueOf(pageLength), String.valueOf((pageNo - 1) * pageLength)};
 		Cursor cursor = mDb.rawQuery(sql, args);
-		ArrayList<TreeNode> out = new ArrayList<>();
+		ArrayList<BooksTreeNode> out = new ArrayList<>();
 		while (cursor != null && cursor.moveToNext()) {
-			TreeNode record = new TreeNode();
+			BooksTreeNode record = new BooksTreeNode();
 			record.page_id = cursor.getString(0);
 			record.parent_id = cursor.getString(1);
 			record.book_code = cursor.getString(2);
@@ -106,12 +104,13 @@ public class DatabaseAdaptor {
 			record.page = cursor.getString(4);
 			out.add(record);
 		}
-		if(cursor!= null) cursor.close();
+		if(cursor!= null) {
+			cursor.close();
+		}
 		return out;
 	}
 
 	public int getSearchHitsTotalCount(String book_code, String queryString) {
-//			String ftsQuery = strf("book_code:{0} {1}", book_code, queryString);
 		String ftsQuery;
 		String sql;
 		String params[];
@@ -131,7 +130,9 @@ public class DatabaseAdaptor {
 		} else {
 			count = 0;
 		}
-		if(cursor!= null) cursor.close();
+		if(cursor!= null) {
+			cursor.close();
+		}
 		return count;
 	}
 
