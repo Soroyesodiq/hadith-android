@@ -49,7 +49,7 @@ public class Content {
         }
 
         //Add title
-        content = "<font color=\"blue\">" + title + "</font><hr>" + content;
+        content = "<font color=\"blue\">" + Content.removeTrailingDot(title) + "</font><hr>" + content;
         return htmlPagePrefix + content + htmlPagePostfix;
     }
 
@@ -59,5 +59,13 @@ public class Content {
         }
         return content;
     }
+
+    @NonNull static String removeTrailingDot(@NonNull String content) {
+        if(content.charAt(content.length()-1) == '.') {
+            return content.substring(0, content.length()-1);
+        }
+        return content;
+    }
+
 
 }

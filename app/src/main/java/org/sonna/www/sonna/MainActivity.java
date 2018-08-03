@@ -49,34 +49,11 @@ public class MainActivity extends AppCompatActivity
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-//        Floating bar at the bottom
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
 				this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 		drawer.setDrawerListener(toggle);
 		toggle.syncState();
-
-//		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//		navigationView.setNavigationItemSelectedListener(this);
-
-
-//		Button searchButton = (Button)findViewById(R.id.mysearch_button);
-//		searchButton.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				search();
-//			}
-//		});
-
 
 /////////////////////////////////////////////////////////////
 		//install DB
@@ -157,7 +134,6 @@ public class MainActivity extends AppCompatActivity
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.addCategory(Intent.CATEGORY_HOME);
 			startActivity(intent);
-
 			return true;
 
 		}
@@ -228,7 +204,7 @@ public class MainActivity extends AppCompatActivity
 			final ArrayList<String> list = new ArrayList<>();
 			curRecords.clear();
 			for (DbRecord record : records) {
-				list.add(record.title);
+				list.add(Content.removeTrailingDot(record.title));
 				curRecords.add(record);
 			}
 			//populate the list of items into the ListView
