@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Stack;
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	String curBookCode = "", curPageId = "";
-	ArrayList<DbRecord> curRecords = new ArrayList<>();
+	ArrayList<TreeNode> curRecords = new ArrayList<>();
 	Stack<String> historyStack = new Stack<>();
 
 	protected void displayContent(String book_code, String page_id, String searchWords) {
@@ -179,12 +177,12 @@ public class MainActivity extends AppCompatActivity
 					return handleSwipeLeftAndRight(event);
 				}
 			});
-			ArrayList<DbRecord> records = dbHelper.getDisplayData(book_code, page_id);
+			ArrayList<TreeNode> records = dbHelper.getDisplayData(book_code, page_id);
 			if (records.size() != 1) {
 				emptyDisplay(displayTextView);
 
 			} else {
-				DbRecord record = records.get(0);
+				TreeNode record = records.get(0);
 				String content = record.page;
 				String htmlContent = Content.decorate(searchWords, record.title, content);
 				displayTextView.loadData(htmlContent, "text/html; charset=UTF-8", null);
@@ -200,10 +198,10 @@ public class MainActivity extends AppCompatActivity
 		try {
 			curBookCode = book_code;
 			curPageId = page_id;
-			ArrayList<DbRecord> records = dbHelper.getKidsData(book_code, page_id);
+			ArrayList<TreeNode> records = dbHelper.getKidsData(book_code, page_id);
 			final ArrayList<String> list = new ArrayList<>();
 			curRecords.clear();
-			for (DbRecord record : records) {
+			for (TreeNode record : records) {
 				list.add(Content.removeTrailingDot(record.title));
 				curRecords.add(record);
 			}
@@ -219,7 +217,7 @@ public class MainActivity extends AppCompatActivity
 			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					DbRecord record = curRecords.get(position);
+					TreeNode record = curRecords.get(position);
 					historyStack.push(curPageId); //is going to change per user click
 					WebView display = (WebView) findViewById(R.id.textViewDisplay);
 					ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
@@ -259,7 +257,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	//Seems search can has its own class
-	ArrayList<DbRecord> curSearchHits = new ArrayList<>();
+	ArrayList<TreeNode> curSearchHits = new ArrayList<>();
 	int currentSearchPagesCount;
 	int currentSearchPageNumber;
 	final int pageLength = 50;
@@ -280,10 +278,10 @@ public class MainActivity extends AppCompatActivity
 		TextView paging = (TextView) findViewById(R.id.text_view_paging);
 		paging.setText(Html.fromHtml(getPagingString(totalHitsCount)));
 
-		ArrayList<DbRecord> hits = dbHelper.search(searchWords, pageLength, pageNumber);
+		ArrayList<TreeNode> hits = dbHelper.search(searchWords, pageLength, pageNumber);
 		curSearchHits.clear();
 		final ArrayList<String> list = new ArrayList<>();
-		for (DbRecord record : hits) {
+		for (TreeNode record : hits) {
 			list.add(record.title);
 			curSearchHits.add(record);
 		}
@@ -297,7 +295,7 @@ public class MainActivity extends AppCompatActivity
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				DbRecord record = curSearchHits.get(position);
+				TreeNode record = curSearchHits.get(position);
 				historyStack.push(curPageId); //is going to change per user click
 				findViewById(R.id.textViewDisplay).setVisibility(View.VISIBLE);
 				findViewById(R.id.listViewTabweeb).setVisibility(View.GONE);

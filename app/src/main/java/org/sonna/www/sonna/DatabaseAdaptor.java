@@ -4,8 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Formatter;
 
@@ -38,11 +37,11 @@ public class DatabaseAdaptor {
 		mDbHelper.close();
 	}
 
-	private ArrayList<DbRecord> selectData(String sql, String args[]) {
+	private ArrayList<TreeNode> selectData(String sql, String args[]) {
 		Cursor cursor = mDb.rawQuery(sql, args);
-		ArrayList<DbRecord> out = new ArrayList<>();
+		ArrayList<TreeNode> out = new ArrayList<>();
 		while (cursor != null && cursor.moveToNext()) {
-			DbRecord record = new DbRecord();
+			TreeNode record = new TreeNode();
 			record.page_id = cursor.getString(0);
 			record.parent_id = cursor.getString(1);
 			record.book_code = cursor.getString(2);
@@ -55,14 +54,14 @@ public class DatabaseAdaptor {
 	}
 
 
-	public ArrayList<DbRecord> getDisplayData(String book_code, String page_id) {
+	public ArrayList<TreeNode> getDisplayData(String book_code, String page_id) {
 		String sql = "SELECT * FROM pages where pages MATCH ?";
 		String params = new Formatter().format("book_code:%s page_id:%s", book_code, page_id).toString();
 		String args[] = new String[]{params};
 		return selectData(sql, args);
 	}
 
-	public ArrayList<DbRecord> getKidsData(String book_code, String page_id) {
+	public ArrayList<TreeNode> getKidsData(String book_code, String page_id) {
 		String args[];
 		String sql;
 		if ("".equals(page_id)) {
@@ -89,7 +88,7 @@ public class DatabaseAdaptor {
 		return ( ! existKids );
 	}
 
-	public ArrayList<DbRecord> search(String terms, int pageLength, int pageNo) {
+	public ArrayList<TreeNode> search(String terms, int pageLength, int pageNo) {
 		String sql = "SELECT * FROM pages where pages MATCH ? order by book_code,page_id LIMIT ? OFFSET ? ";
 //		String book_code = ""; //search all books
 //		String ftsQuery = strf("book_code:{0} {1}", book_code, modifiedQuery);
@@ -97,9 +96,9 @@ public class DatabaseAdaptor {
 //		String ftsQuery = new Formatter().format("%s", book_code, terms).toString();
 		String args[] = {terms, String.valueOf(pageLength), String.valueOf((pageNo - 1) * pageLength)};
 		Cursor cursor = mDb.rawQuery(sql, args);
-		ArrayList<DbRecord> out = new ArrayList<>();
+		ArrayList<TreeNode> out = new ArrayList<>();
 		while (cursor != null && cursor.moveToNext()) {
-			DbRecord record = new DbRecord();
+			TreeNode record = new TreeNode();
 			record.page_id = cursor.getString(0);
 			record.parent_id = cursor.getString(1);
 			record.book_code = cursor.getString(2);
