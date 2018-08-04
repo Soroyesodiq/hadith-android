@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -39,13 +40,7 @@ public class BooksTreeService {
 		Cursor cursor = mDb.rawQuery(sql, args);
 		ArrayList<BooksTreeNode> out = new ArrayList<>();
 		while (cursor != null && cursor.moveToNext()) {
-			BooksTreeNode record = new BooksTreeNode();
-			record.setPage_id(cursor.getString(0));
-			record.setParent_id(cursor.getString(1));
-			record.setBook_code(cursor.getString(2));
-			record.setTitle(cursor.getString(3));
-			record.setPage(cursor.getString(4));
-			out.add(record);
+			out.add(getBooksTreeNodeObject(cursor));
 		}
 		if(cursor!= null) {
 		    cursor.close();
@@ -53,8 +48,13 @@ public class BooksTreeService {
 		return out;
 	}
 
+    @NonNull
+    private BooksTreeNode getBooksTreeNodeObject(@NonNull Cursor cursor) {
+        return new BooksTreeNode(cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4));
+    }
 
-	public ArrayList<BooksTreeNode> findNode(String book_code, String page_id) {
+    public ArrayList<BooksTreeNode> findNode(String book_code, String page_id) {
 		String sql = "SELECT * FROM pages where pages MATCH ?";
 		String params = new Formatter().format("book_code:%s page_id:%s", book_code, page_id).toString();
 		String args[] = new String[]{params};
@@ -76,9 +76,7 @@ public class BooksTreeService {
 		return selectData(sql, args);
 	}
 
-
-	public boolean IsLeafNode(String book_code, String page_id) {
-		assert "".equals(book_code);
+	public boolean isLeafNode(String book_code, String page_id) {
 		String sql = "SELECT * FROM pages where pages MATCH ?";
 		String param = new Formatter().format("book_code:%s parent_id:%s", book_code, page_id).toString();
 		String[] args = new String[]{param};
@@ -96,15 +94,9 @@ public class BooksTreeService {
 		Cursor cursor = mDb.rawQuery(sql, args);
 		ArrayList<BooksTreeNode> out = new ArrayList<>();
 		while (cursor != null && cursor.moveToNext()) {
-			BooksTreeNode record = new BooksTreeNode();
-			record.setPage_id(cursor.getString(0));
-			record.setParent_id(cursor.getString(1));
-			record.setBook_code(cursor.getString(2));
-			record.setTitle(cursor.getString(3));
-			record.setPage(cursor.getString(4));
-			out.add(record);
+			out.add(getBooksTreeNodeObject(cursor));
 		}
-		if(cursor!= null) {
+		if(cursor != null) {
 			cursor.close();
 		}
 		return out;

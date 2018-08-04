@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity
 		WebView display = (WebView) findViewById(R.id.textViewDisplay);
 		ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
-		if (dbHelper.IsLeafNode(curBookCode, page_id)) {
+		if (dbHelper.isLeafNode(curBookCode, page_id)) {
 			display.setVisibility(View.VISIBLE);
 			tabweeb.setVisibility(View.GONE);
 			displayContent(curBookCode, page_id, "");
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
 					WebView display = (WebView) findViewById(R.id.textViewDisplay);
 					ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
-					if (dbHelper.IsLeafNode(record.getBook_code(), record.getPage_id())) {
+					if (dbHelper.isLeafNode(record.getBook_code(), record.getPage_id())) {
 						display.setVisibility(View.VISIBLE);
 						tabweeb.setVisibility(View.GONE);
 						displayContent(record.getBook_code(), record.getPage_id(), "");

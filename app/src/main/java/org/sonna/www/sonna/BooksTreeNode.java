@@ -8,44 +8,33 @@ public class BooksTreeNode {
 	private String title;
 	private String page;
 
-	public String getPage_id() {
-		return page_id;
-	}
+    BooksTreeNode(String page_id, String parent_id, String book_code, String title, String page) {
+        this.page_id = page_id;
+        this.parent_id = parent_id;
+        this.book_code = book_code;
+        this.title = title;
+        this.page = page;
+    }
 
-	public void setPage_id(String page_id) {
-		this.page_id = page_id;
+    public String getPage_id() {
+		return page_id;
 	}
 
 	public String getParent_id() {
 		return parent_id;
 	}
 
-	public void setParent_id(String parent_id) {
-		this.parent_id = parent_id;
-	}
-
 	public String getBook_code() {
 		return book_code;
-	}
-
-	public void setBook_code(String book_code) {
-		this.book_code = book_code;
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public String getPage() {
 		return page;
 	}
 
-	public void setPage(String page) {
-		this.page = page;
-	}
 	//Do not retrieve page_fts, as it it no-vowel text used for search only.
 }
