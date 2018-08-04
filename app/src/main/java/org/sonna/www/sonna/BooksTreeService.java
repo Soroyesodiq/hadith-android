@@ -40,11 +40,11 @@ public class BooksTreeService {
 		ArrayList<BooksTreeNode> out = new ArrayList<>();
 		while (cursor != null && cursor.moveToNext()) {
 			BooksTreeNode record = new BooksTreeNode();
-			record.page_id = cursor.getString(0);
-			record.parent_id = cursor.getString(1);
-			record.book_code = cursor.getString(2);
-			record.title = cursor.getString(3);
-			record.page = cursor.getString(4);
+			record.setPage_id(cursor.getString(0));
+			record.setParent_id(cursor.getString(1));
+			record.setBook_code(cursor.getString(2));
+			record.setTitle(cursor.getString(3));
+			record.setPage(cursor.getString(4));
 			out.add(record);
 		}
 		if(cursor!= null) {
@@ -97,11 +97,11 @@ public class BooksTreeService {
 		ArrayList<BooksTreeNode> out = new ArrayList<>();
 		while (cursor != null && cursor.moveToNext()) {
 			BooksTreeNode record = new BooksTreeNode();
-			record.page_id = cursor.getString(0);
-			record.parent_id = cursor.getString(1);
-			record.book_code = cursor.getString(2);
-			record.title = cursor.getString(3);
-			record.page = cursor.getString(4);
+			record.setPage_id(cursor.getString(0));
+			record.setParent_id(cursor.getString(1));
+			record.setBook_code(cursor.getString(2));
+			record.setTitle(cursor.getString(3));
+			record.setPage(cursor.getString(4));
 			out.add(record);
 		}
 		if(cursor!= null) {

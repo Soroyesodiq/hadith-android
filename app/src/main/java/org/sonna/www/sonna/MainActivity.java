@@ -183,11 +183,11 @@ public class MainActivity extends AppCompatActivity
 
 			} else {
 				BooksTreeNode record = records.get(0);
-				String content = record.page;
-				String htmlContent = Content.decorate(searchWords, record.title, content);
+				String content = record.getPage();
+				String htmlContent = Content.decorate(searchWords, record.getTitle(), content);
 				displayTextView.loadData(htmlContent, "text/html; charset=UTF-8", null);
-				curBookCode = record.book_code;
-				curPageId = record.page_id;
+				curBookCode = record.getBook_code();
+				curPageId = record.getPage_id();
 			}
 		} catch (Exception exception) {
 			Log.e(LOG_TAG, "exception", exception);
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity
 			final ArrayList<String> list = new ArrayList<>();
 			curRecords.clear();
 			for (BooksTreeNode record : records) {
-				list.add(Content.removeTrailingDot(record.title));
+				list.add(Content.removeTrailingDot(record.getTitle()));
 				curRecords.add(record);
 			}
 			//populate the list of items into the ListView
@@ -222,15 +222,15 @@ public class MainActivity extends AppCompatActivity
 					WebView display = (WebView) findViewById(R.id.textViewDisplay);
 					ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
-					if (dbHelper.IsLeafNode(record.book_code, record.page_id)) {
+					if (dbHelper.IsLeafNode(record.getBook_code(), record.getPage_id())) {
 						display.setVisibility(View.VISIBLE);
 						tabweeb.setVisibility(View.GONE);
-						displayContent(record.book_code, record.page_id, "");
+						displayContent(record.getBook_code(), record.getPage_id(), "");
 					} else {
 						display.setVisibility(View.GONE);
 						emptyDisplay(display);
 						tabweeb.setVisibility(View.VISIBLE);
-						displayKids(record.book_code, record.page_id);
+						displayKids(record.getBook_code(), record.getPage_id());
 
 					}
 				}
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity
 		curSearchHits.clear();
 		final ArrayList<String> list = new ArrayList<>();
 		for (BooksTreeNode record : hits) {
-			list.add(record.title);
+			list.add(record.getTitle());
 			curSearchHits.add(record);
 		}
 		ListView listView = (ListView) findViewById(R.id.listView_search_hits);
@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity
 				findViewById(R.id.listViewTabweeb).setVisibility(View.GONE);
 
 				//searchWords
-				displayContent(record.book_code, record.page_id, searchWords);
+				displayContent(record.getBook_code(), record.getPage_id(), searchWords);
 				DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 				drawer.closeDrawer(GravityCompat.START);
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
