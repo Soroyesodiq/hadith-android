@@ -1,4 +1,4 @@
-package org.sonna.www.sonna;
+package org.sonna.www.sonna.services;
 
 import org.junit.Test;
 import org.sonna.www.sonna.services.TextUtils;

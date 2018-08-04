@@ -52,7 +52,7 @@ public class TextUtils {
     }
 
     @NonNull
-    static String removeTrailingHashes(@NonNull String content) {
+    public static String removeTrailingHashes(@NonNull String content) {
         if(content.charAt(content.length()-1) == '#') {
             return content.substring(0, content.length()-2);
         }
