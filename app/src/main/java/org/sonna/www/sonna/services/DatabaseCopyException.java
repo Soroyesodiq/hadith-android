@@ -1,8 +1,8 @@
-package org.sonna.www.sonna;
+package org.sonna.www.sonna.services;
 
 import java.io.IOException;
 
-class DatabaseCopyException extends Throwable {
+public class DatabaseCopyException extends Throwable {
     public DatabaseCopyException(String message, Throwable exception) {
         super(message, exception);
     }

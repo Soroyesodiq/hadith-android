@@ -1,11 +1,10 @@
-package org.sonna.www.sonna;
+package org.sonna.www.sonna.services;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.Formatter;
 
@@ -16,7 +15,7 @@ public class BooksTreeService {
 	private SQLiteDatabase db;
 	private SQLiteInstaller sqLiteInstaller;
 
-	BooksTreeService(Context context) {
+	public BooksTreeService(Context context) {
 		sqLiteInstaller = new SQLiteInstaller(context);
 	}
 

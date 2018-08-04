@@ -1,6 +1,7 @@
 package org.sonna.www.sonna;
 
 import org.junit.Test;
+import org.sonna.www.sonna.services.TextUtils;
 
 import static org.junit.Assert.*;
 

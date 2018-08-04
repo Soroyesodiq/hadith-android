@@ -1,20 +1,20 @@
-package org.sonna.www.sonna;
+package org.sonna.www.sonna.services;
 
 import java.util.Formatter;
 
-class SearchPaging {
+public class SearchPaging {
     int currentSearchPagesCount;
     final int pageLength = 50;
 
-    void init(int totalHitsCount) {
+    public void init(int totalHitsCount) {
         currentSearchPagesCount = (int) Math.ceil((double) totalHitsCount / (double) pageLength);
     }
 
-    int getPageLength() {
+    public int getPageLength() {
         return pageLength;
     }
 
-    int getNextSearchPageNumber(int currentSearchPageNumber) {
+    public int getNextSearchPageNumber(int currentSearchPageNumber) {
         int newSearchPageNumber = currentSearchPageNumber + 1;
         if (newSearchPageNumber > currentSearchPagesCount) {
             newSearchPageNumber--;
@@ -22,7 +22,7 @@ class SearchPaging {
         return newSearchPageNumber;
     }
 
-    int getPreviousPageNumber(int currentSearchPageNumber) {
+    public int getPreviousPageNumber(int currentSearchPageNumber) {
         int newPageNumber = currentSearchPageNumber - 1;
         if (newPageNumber < 1) {
             newPageNumber = 1;
@@ -30,7 +30,7 @@ class SearchPaging {
         return newPageNumber;
     }
 
-    String getPagingString(int currentSearchPageNumber) {
+    public String getPagingString(int currentSearchPageNumber) {
         return new Formatter().format(" ( %d / %d ) ", currentSearchPageNumber, currentSearchPagesCount).toString();
     }
 }

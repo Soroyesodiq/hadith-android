@@ -1,10 +1,12 @@
-package org.sonna.www.sonna;
+package org.sonna.www.sonna.services;
 
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import org.sonna.www.sonna.services.DatabaseCopyException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,7 +23,7 @@ public class SQLiteInstaller extends SQLiteOpenHelper {
 	private SQLiteDatabase mDataBase;
 	private final Context mContext;
 
-	SQLiteInstaller(Context context) {
+	public SQLiteInstaller(Context context) {
 		super(context, DB_NAME, null, 1);// 1? Its database Version
 		if (android.os.Build.VERSION.SDK_INT >= 17) {
 			DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
@@ -31,7 +33,7 @@ public class SQLiteInstaller extends SQLiteOpenHelper {
 		this.mContext = context;
 	}
 
-	public void install() throws DatabaseCopyException{
+	public void install() throws DatabaseCopyException {
 		boolean mDataBaseExist = isDatabaseExist();
 		if (!mDataBaseExist) {
 			this.getReadableDatabase();

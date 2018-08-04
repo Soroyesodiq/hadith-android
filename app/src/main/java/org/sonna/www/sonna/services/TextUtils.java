@@ -1,4 +1,4 @@
-package org.sonna.www.sonna;
+package org.sonna.www.sonna.services;
 
 import android.support.annotation.NonNull;
 
@@ -31,7 +31,7 @@ public class TextUtils {
 
 
     @NonNull
-    static String decorate(@NonNull String searchWords, @NonNull String title, @NonNull String content) {
+    public static String decorate(@NonNull String searchWords, @NonNull String title, @NonNull String content) {
 
         content = content.trim();
         content = removeTrailingHashes(content);
@@ -60,7 +60,7 @@ public class TextUtils {
     }
 
     @NonNull
-    static String removeTrailingDot(@NonNull String content) {
+    public static String removeTrailingDot(@NonNull String content) {
         if(content.charAt(content.length()-1) == '.') {
             return content.substring(0, content.length()-1);
         }

@@ -26,8 +26,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.sonna.www.sonna.services.BooksTreeNode;
+import org.sonna.www.sonna.services.BooksTreeService;
+import org.sonna.www.sonna.services.SQLiteInstaller;
+import org.sonna.www.sonna.services.SearchPaging;
+import org.sonna.www.sonna.services.TextUtils;
+
 import java.util.ArrayList;
 import java.util.Stack;
+
+import org.sonna.www.sonna.services.DatabaseCopyException;
+
 
 public class MainActivity extends AppCompatActivity
 //		implements NavigationView.OnNavigationItemSelectedListener
@@ -289,7 +298,6 @@ public class MainActivity extends AppCompatActivity
 		}
 		ListView listView = (ListView) findViewById(R.id.listView_search_hits);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-//				android.R.layout.simple_list_item_1, android.R.id.text1, list);
 				R.layout.search_hits_list_view, android.R.id.text1, list);
 		listView.setAdapter(adapter);
 
@@ -308,10 +316,8 @@ public class MainActivity extends AppCompatActivity
 				drawer.closeDrawer(GravityCompat.START);
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0); //hide keyboard
-
 			}
 		});
-
 	}
 
 	// Swipe left and right
@@ -358,7 +364,6 @@ public class MainActivity extends AppCompatActivity
 		aboutAlert.show();
 	}
 
-
     public void onSearchNextPage(View view) {
         int newPageNumber = paging.getNextSearchPageNumber(currentSearchPageNumber);
         if(newPageNumber != currentSearchPageNumber) {
@@ -372,5 +377,4 @@ public class MainActivity extends AppCompatActivity
             searchDatabase(newPageNumber);
         }
     }
-
 }
