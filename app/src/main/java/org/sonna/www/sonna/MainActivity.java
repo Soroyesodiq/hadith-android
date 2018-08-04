@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity
 		WebView display = (WebView) findViewById(R.id.textViewDisplay);
 		ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
-		if (dbHelper.IsLeafItem(curBookCode, page_id)) {
+		if (dbHelper.IsLeafNode(curBookCode, page_id)) {
 			display.setVisibility(View.VISIBLE);
 			tabweeb.setVisibility(View.GONE);
 			displayContent(curBookCode, page_id, "");
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity
 					return handleSwipeLeftAndRight(event);
 				}
 			});
-			ArrayList<BooksTreeNode> records = dbHelper.getDisplayData(book_code, page_id);
+			ArrayList<BooksTreeNode> records = dbHelper.findNode(book_code, page_id);
 			if (records.size() != 1) {
 				emptyDisplay(displayTextView);
 
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity
 		try {
 			curBookCode = book_code;
 			curPageId = page_id;
-			ArrayList<BooksTreeNode> records = dbHelper.getKidsData(book_code, page_id);
+			ArrayList<BooksTreeNode> records = dbHelper.findKidNodes(book_code, page_id);
 			final ArrayList<String> list = new ArrayList<>();
 			curRecords.clear();
 			for (BooksTreeNode record : records) {
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
 					WebView display = (WebView) findViewById(R.id.textViewDisplay);
 					ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
-					if (dbHelper.IsLeafItem(record.book_code, record.page_id)) {
+					if (dbHelper.IsLeafNode(record.book_code, record.page_id)) {
 						display.setVisibility(View.VISIBLE);
 						tabweeb.setVisibility(View.GONE);
 						displayContent(record.book_code, record.page_id, "");

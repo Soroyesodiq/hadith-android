@@ -54,14 +54,14 @@ public class BooksTreeService {
 	}
 
 
-	public ArrayList<BooksTreeNode> getDisplayData(String book_code, String page_id) {
+	public ArrayList<BooksTreeNode> findNode(String book_code, String page_id) {
 		String sql = "SELECT * FROM pages where pages MATCH ?";
 		String params = new Formatter().format("book_code:%s page_id:%s", book_code, page_id).toString();
 		String args[] = new String[]{params};
 		return selectData(sql, args);
 	}
 
-	public ArrayList<BooksTreeNode> getKidsData(String book_code, String page_id) {
+	public ArrayList<BooksTreeNode> findKidNodes(String book_code, String page_id) {
 		String args[];
 		String sql;
 		if ("".equals(page_id)) {
@@ -77,7 +77,7 @@ public class BooksTreeService {
 	}
 
 
-	public boolean IsLeafItem(String book_code, String page_id) {
+	public boolean IsLeafNode(String book_code, String page_id) {
 		assert "".equals(book_code);
 		String sql = "SELECT * FROM pages where pages MATCH ?";
 		String param = new Formatter().format("book_code:%s parent_id:%s", book_code, page_id).toString();
