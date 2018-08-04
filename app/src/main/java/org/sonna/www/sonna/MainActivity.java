@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
 {
 
 	protected static final String LOG_TAG = "MainActivity";
-	BooksTreeService dbHelper;
+	BooksTreeService booksService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,15 +76,15 @@ public class MainActivity extends AppCompatActivity
 //		hourGlassDlg.hide();
 
 		//Open DB and display initial view
-		dbHelper = new BooksTreeService(context);
-		dbHelper.open();
+		booksService = new BooksTreeService(context);
+		booksService.open();
 		displayKids("", "");
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		dbHelper.close();
+		booksService.close();
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity
 		WebView display = (WebView) findViewById(R.id.textViewDisplay);
 		ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
-		if (dbHelper.isLeafNode(curBookCode, page_id)) {
+		if (booksService.isLeafNode(curBookCode, page_id)) {
 			display.setVisibility(View.VISIBLE);
 			tabweeb.setVisibility(View.GONE);
 			displayContent(curBookCode, page_id, "");
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity
 					return handleSwipeLeftAndRight(event);
 				}
 			});
-			ArrayList<BooksTreeNode> records = dbHelper.findNode(book_code, page_id);
+			ArrayList<BooksTreeNode> records = booksService.findNode(book_code, page_id);
 			if (records.size() != 1) {
 				emptyDisplay(displayTextView);
 
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity
 		try {
 			curBookCode = book_code;
 			curPageId = page_id;
-			ArrayList<BooksTreeNode> records = dbHelper.findKidNodes(book_code, page_id);
+			ArrayList<BooksTreeNode> records = booksService.findKidNodes(book_code, page_id);
 			final ArrayList<String> list = new ArrayList<>();
 			curRecords.clear();
 			for (BooksTreeNode record : records) {
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
 					WebView display = (WebView) findViewById(R.id.textViewDisplay);
 					ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
 
-					if (dbHelper.isLeafNode(record.getBook_code(), record.getPage_id())) {
+					if (booksService.isLeafNode(record.getBook_code(), record.getPage_id())) {
 						display.setVisibility(View.VISIBLE);
 						tabweeb.setVisibility(View.GONE);
 						displayContent(record.getBook_code(), record.getPage_id(), "");
@@ -248,19 +248,16 @@ public class MainActivity extends AppCompatActivity
 		alertDialog.setTitle(title);
 		alertDialog.setMessage(body);
 		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
+			new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
 		alertDialog.show();
 	}
 
 	//Seems search can has its own class
 	ArrayList<BooksTreeNode> curSearchHits = new ArrayList<>();
-	int currentSearchPagesCount;
-	int currentSearchPageNumber;
-	final int pageLength = 50;
 
 	public void onSearch(View view) {
 		searchDatabase(1);
@@ -273,12 +270,14 @@ public class MainActivity extends AppCompatActivity
 		if (searchWords.trim().length() == 0) {
 			return; //just do nothing
 		}
-		int totalHitsCount = dbHelper.getSearchHitsTotalCount("", searchWords);
-		//set text in between next and prev
-		TextView paging = (TextView) findViewById(R.id.text_view_paging);
-		paging.setText(Html.fromHtml(getPagingString(totalHitsCount)));
+		int totalHitsCount = booksService.getSearchHitsTotalCount("", searchWords);
+		String pagingString = getPagingString(totalHitsCount);
 
-		ArrayList<BooksTreeNode> hits = dbHelper.search(searchWords, pageLength, pageNumber);
+        //set text in between next and prev
+		TextView paging = (TextView) findViewById(R.id.text_view_paging);
+		paging.setText(Html.fromHtml(pagingString));
+
+		ArrayList<BooksTreeNode> hits = booksService.search(searchWords, pageLength, pageNumber);
 		curSearchHits.clear();
 		final ArrayList<String> list = new ArrayList<>();
 		for (BooksTreeNode record : hits) {
@@ -312,30 +311,6 @@ public class MainActivity extends AppCompatActivity
 
 	}
 
-	public void onSearchNextPage(View view) {
-		currentSearchPageNumber++;
-		if (currentSearchPageNumber > currentSearchPagesCount) {
-			currentSearchPageNumber--;
-			return;
-		}
-		searchDatabase(currentSearchPageNumber);
-	}
-
-	public void onSearchPreviousPage(View view) {
-		currentSearchPageNumber--;
-		if (currentSearchPageNumber < 1) {
-			currentSearchPageNumber = 1;
-			return;
-		}
-		searchDatabase(currentSearchPageNumber);
-	}
-
-	public String getPagingString(int totalHitsCount) {
-		//Adjust paging
-		currentSearchPagesCount = (int) Math.ceil((double) totalHitsCount / (double) pageLength);
-		return new Formatter().format(" ( %d / %d ) ", currentSearchPageNumber, currentSearchPagesCount).toString();
-	}
-
 	// Swipe left and right
 	private float x1, x2;
 	static final int MIN_DISTANCE = 150;
@@ -365,7 +340,6 @@ public class MainActivity extends AppCompatActivity
 		return super.onTouchEvent(event);
 	}
 
-
 	void showAboutDialogue() {
 		AlertDialog.Builder aboutAlert = new AlertDialog.Builder(
 				MainActivity.this);
@@ -380,5 +354,48 @@ public class MainActivity extends AppCompatActivity
 		});
 		aboutAlert.show();
 	}
+
+
+    public void onSearchNextPage(View view) {
+        int newPageNumber = getNextSearchPageNumber();
+        if(newPageNumber != currentSearchPageNumber) {
+            searchDatabase(newPageNumber);
+        }
+    }
+
+    public void onSearchPreviousPage(View view) {
+        int newPageNumber = getPreviousPageNumber();
+        if(newPageNumber != currentSearchPageNumber) {
+            searchDatabase(newPageNumber);
+        }
+    }
+
+    ///////////////////////////////////////////////////
+
+    int currentSearchPagesCount;
+    int currentSearchPageNumber;
+    final int pageLength = 50;
+
+    private int getNextSearchPageNumber() {
+        int newSearchPageNumber = currentSearchPageNumber + 1;
+        if (newSearchPageNumber > currentSearchPagesCount) {
+            newSearchPageNumber--;
+        }
+        return newSearchPageNumber;
+    }
+
+    private int getPreviousPageNumber() {
+        int newPageNumber = currentSearchPageNumber - 1;
+        if (newPageNumber < 1) {
+            newPageNumber = 1;
+        }
+        return newPageNumber;
+    }
+
+    public String getPagingString(int totalHitsCount) {
+        //Adjust paging
+        currentSearchPagesCount = (int) Math.ceil((double) totalHitsCount / (double) pageLength);
+        return new Formatter().format(" ( %d / %d ) ", currentSearchPageNumber, currentSearchPagesCount).toString();
+    }
 
 }
