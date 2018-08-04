@@ -263,7 +263,10 @@ public class MainActivity extends AppCompatActivity
 		searchDatabase(1);
 	}
 
-	public void searchDatabase(int pageNumber) {
+    SearchPaging paging = new SearchPaging();
+    int currentSearchPageNumber;
+
+    public void searchDatabase(int pageNumber) {
 		currentSearchPageNumber = pageNumber;
 		EditText searchEditor = (EditText) findViewById(R.id.search_edit_text);
 		final String searchWords = searchEditor.getText().toString();
@@ -271,13 +274,14 @@ public class MainActivity extends AppCompatActivity
 			return; //just do nothing
 		}
 		int totalHitsCount = booksService.getSearchHitsTotalCount("", searchWords);
-		String pagingString = getPagingString(totalHitsCount);
+        paging.init(totalHitsCount);
+		String pagingString = paging.getPagingString(currentSearchPageNumber);
 
         //set text in between next and prev
-		TextView paging = (TextView) findViewById(R.id.text_view_paging);
-		paging.setText(Html.fromHtml(pagingString));
+		TextView pagingTextView = (TextView) findViewById(R.id.text_view_paging);
+        pagingTextView.setText(Html.fromHtml(pagingString));
 
-		ArrayList<BooksTreeNode> hits = booksService.search(searchWords, pageLength, pageNumber);
+		ArrayList<BooksTreeNode> hits = booksService.search(searchWords, paging.getPageLength(), pageNumber);
 		curSearchHits.clear();
 		final ArrayList<String> list = new ArrayList<>();
 		for (BooksTreeNode record : hits) {
@@ -357,14 +361,14 @@ public class MainActivity extends AppCompatActivity
 
 
     public void onSearchNextPage(View view) {
-        int newPageNumber = getNextSearchPageNumber();
+        int newPageNumber = paging.getNextSearchPageNumber(currentSearchPageNumber);
         if(newPageNumber != currentSearchPageNumber) {
             searchDatabase(newPageNumber);
         }
     }
 
     public void onSearchPreviousPage(View view) {
-        int newPageNumber = getPreviousPageNumber();
+        int newPageNumber = paging.getPreviousPageNumber(currentSearchPageNumber);
         if(newPageNumber != currentSearchPageNumber) {
             searchDatabase(newPageNumber);
         }
@@ -372,30 +376,36 @@ public class MainActivity extends AppCompatActivity
 
     ///////////////////////////////////////////////////
 
-    int currentSearchPagesCount;
-    int currentSearchPageNumber;
-    final int pageLength = 50;
+    class SearchPaging {
+        int currentSearchPagesCount;
+        final int pageLength = 50;
 
-    private int getNextSearchPageNumber() {
-        int newSearchPageNumber = currentSearchPageNumber + 1;
-        if (newSearchPageNumber > currentSearchPagesCount) {
-            newSearchPageNumber--;
+        void init(int totalHitsCount) {
+            currentSearchPagesCount = (int) Math.ceil((double) totalHitsCount / (double) pageLength);
         }
-        return newSearchPageNumber;
-    }
 
-    private int getPreviousPageNumber() {
-        int newPageNumber = currentSearchPageNumber - 1;
-        if (newPageNumber < 1) {
-            newPageNumber = 1;
+        int getPageLength() {
+            return pageLength;
         }
-        return newPageNumber;
-    }
 
-    public String getPagingString(int totalHitsCount) {
-        //Adjust paging
-        currentSearchPagesCount = (int) Math.ceil((double) totalHitsCount / (double) pageLength);
-        return new Formatter().format(" ( %d / %d ) ", currentSearchPageNumber, currentSearchPagesCount).toString();
-    }
+        int getNextSearchPageNumber(int currentSearchPageNumber) {
+            int newSearchPageNumber = currentSearchPageNumber + 1;
+            if (newSearchPageNumber > currentSearchPagesCount) {
+                newSearchPageNumber--;
+            }
+            return newSearchPageNumber;
+        }
 
+        int getPreviousPageNumber(int currentSearchPageNumber) {
+            int newPageNumber = currentSearchPageNumber - 1;
+            if (newPageNumber < 1) {
+                newPageNumber = 1;
+            }
+            return newPageNumber;
+        }
+
+        String getPagingString(int currentSearchPageNumber) {
+            return new Formatter().format(" ( %d / %d ) ", currentSearchPageNumber, currentSearchPagesCount).toString();
+        }
+    }
 }
