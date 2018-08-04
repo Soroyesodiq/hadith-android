@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
 {
 
 	protected static final String LOG_TAG = "MainActivity";
-	BooksTreeService booksService;
+    BooksTreeService booksService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
 
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-				this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 		drawer.setDrawerListener(toggle);
 		toggle.syncState();
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 			db.install();
 		} catch (DatabaseCopyException exception) {
 			Log.e(LOG_TAG, "open >>" + exception.toString());
-            showErrorDialogue("خطأ في العمل", "يوجد خطأ في تهيئة العمل علي ملف البيانات.", exception);
+            showErrorDialogue("خطأ في العمل", "يوجد خطأ في تهيئة العمل علي ملف الأحاديث.", exception);
 		}
 
 //		hourGlassDlg.hide();
@@ -322,9 +322,8 @@ public class MainActivity extends AppCompatActivity
 
 	// Swipe left and right
 	private float x1, x2;
-	static final int MIN_DISTANCE = 150;
-
 	public boolean handleSwipeLeftAndRight(MotionEvent event) {
+        final int MIN_DISTANCE = 150;
 		if (findViewById(R.id.listViewTabweeb).getVisibility() == View.VISIBLE) {
 			return super.onTouchEvent(event);
 		}
