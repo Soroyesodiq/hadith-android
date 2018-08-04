@@ -27,7 +27,9 @@ Technology
 ----------
 
 * This is a standard Android Studio application. If some file is missing, please contact me.
-* Data is stored in Sqlite file. As the file is really huge, it is not included currently. 
+* Data is stored in Sqlite file. As the file is really huge, it is not included currently. If you downloaded the application from Android 
+on https://play.google.com/store/apps/details?id=org.sonna.www.sonna
+install it and then copy the sonna.sqlite file from application data folder.
 * full text indexing feature is used to search inside the Sqlite file.
 
 
