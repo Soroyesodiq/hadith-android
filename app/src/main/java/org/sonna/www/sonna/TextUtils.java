@@ -2,7 +2,7 @@ package org.sonna.www.sonna;
 
 import android.support.annotation.NonNull;
 
-public class Content {
+public class TextUtils {
 
     private static String addVowels(String arabic) {
         StringBuilder result = new StringBuilder();
@@ -43,11 +43,11 @@ public class Content {
         content = content.replaceAll("##", "<br><hr>");
         content = content.replaceAll("\n", "<br>");
         if(searchWords.trim().length() > 0) { //highlight search text
-            content = Content.highlight(content, searchWords);
+            content = TextUtils.highlight(content, searchWords);
         }
 
         //Add title
-        content = "<font color=\"blue\">" + Content.removeTrailingDot(title) + "</font><hr>" + content;
+        content = "<font color=\"blue\">" + TextUtils.removeTrailingDot(title) + "</font><hr>" + content;
         return htmlPagePrefix + content + htmlPagePostfix;
     }
 

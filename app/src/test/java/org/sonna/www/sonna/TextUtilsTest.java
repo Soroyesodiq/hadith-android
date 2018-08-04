@@ -7,14 +7,14 @@ import static org.junit.Assert.*;
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
  */
-public class ContentTest {
+public class TextUtilsTest {
 
 
 	@Test
 	public void testSearchHighlight() {
 		String text =  "besm ellah ";
 		String textHighlighted = "besm <font color=\"red\">ellah</font> ";
-		assertEquals(textHighlighted, Content.highlight(text, "ellah"));
+		assertEquals(textHighlighted, TextUtils.highlight(text, "ellah"));
 	}
 
 
@@ -22,7 +22,7 @@ public class ContentTest {
 	public void testTrimTrailingHashes() {
 		final String content = "some test message ##";
 		final String content2 = "some test message ";
-		assertEquals(content2, Content.removeTrailingHashes(content));
+		assertEquals(content2, TextUtils.removeTrailingHashes(content));
 	}
 
 	@Test

@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity
 			} else {
 				BooksTreeNode record = records.get(0);
 				String content = record.getPage();
-				String htmlContent = Content.decorate(searchWords, record.getTitle(), content);
+				String htmlContent = TextUtils.decorate(searchWords, record.getTitle(), content);
 				displayTextView.loadData(htmlContent, "text/html; charset=UTF-8", null);
 				curBookCode = record.getBook_code();
 				curPageId = record.getPage_id();
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity
 			final ArrayList<String> list = new ArrayList<>();
 			curRecords.clear();
 			for (BooksTreeNode record : records) {
-				list.add(Content.removeTrailingDot(record.getTitle()));
+				list.add(TextUtils.removeTrailingDot(record.getTitle()));
 				curRecords.add(record);
 			}
 			//populate the list of items into the ListView
