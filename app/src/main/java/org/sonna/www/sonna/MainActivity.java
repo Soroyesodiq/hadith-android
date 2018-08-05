@@ -61,12 +61,11 @@ public class MainActivity extends AppCompatActivity
 		drawer.setDrawerListener(toggle);
 		toggle.syncState();
 
-/////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////
 		//install DB
 
 		//FIXME: Use this instead of getting Context because activity is already extends Context
-		Context context = getApplicationContext();
-		SQLiteInstaller db = new SQLiteInstaller(context);
+		SQLiteInstaller db = new SQLiteInstaller(this);
 
 //		ProgressDialog hourGlassDlg = new ProgressDialog(this);
 //		hourGlassDlg.setMessage("برجاء الإنتظار");
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity
 //		hourGlassDlg.hide();
 
 		//Open DB and display initial view
-		booksService = new BooksTreeService(context);
+		booksService = new BooksTreeService(this);
 		booksService.open();
 		displayKids("", "");
 	}
@@ -360,6 +359,7 @@ public class MainActivity extends AppCompatActivity
 		AlertDialog.Builder aboutAlert = new AlertDialog.Builder(
 				MainActivity.this);
 		LayoutInflater factory = LayoutInflater.from(MainActivity.this);
+		//FIXME: avoid passing null as the root view
 		final ImageView view = (ImageView) factory.inflate(R.layout.about_image_view, null);
 		aboutAlert.setView(view);
 		aboutAlert.setTitle("عن البرنامج");
