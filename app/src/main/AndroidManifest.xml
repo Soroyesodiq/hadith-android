@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="org.sonna.www.sonna"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionName="3.0.0"
-    >
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
