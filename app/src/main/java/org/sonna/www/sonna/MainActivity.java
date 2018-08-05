@@ -178,6 +178,8 @@ public class MainActivity extends AppCompatActivity
 	protected void displayContent(String book_code, String page_id, String searchWords) {
 		try {
 			WebView displayTextView = (WebView) findViewById(R.id.textViewDisplay);
+			//FIXME: Warning:(181, 4) Custom view ``WebView`` has `setOnTouchListener` called on it but does not override `performClick`
+            //FIXME: Warning:(183, 20) `onTouch` should call `View#performClick` when a click is detected
 			displayTextView.setOnTouchListener(new View.OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
@@ -359,8 +361,8 @@ public class MainActivity extends AppCompatActivity
 		AlertDialog.Builder aboutAlert = new AlertDialog.Builder(
 				MainActivity.this);
 		LayoutInflater factory = LayoutInflater.from(MainActivity.this);
-		//FIXME: avoid passing null as the root view
-		final ImageView view = (ImageView) factory.inflate(R.layout.about_image_view, null);
+        WebView mainView = (WebView) findViewById(R.id.nav_about_us);
+        final ImageView view = (ImageView) factory.inflate(R.layout.about_image_view, mainView);
 		aboutAlert.setView(view);
 		aboutAlert.setTitle("عن البرنامج");
 		aboutAlert.setNeutralButton("إغلاق", new DialogInterface.OnClickListener() {
