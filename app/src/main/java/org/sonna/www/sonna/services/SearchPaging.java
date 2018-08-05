@@ -3,8 +3,8 @@ package org.sonna.www.sonna.services;
 import java.util.Formatter;
 
 public class SearchPaging {
-    int currentSearchPagesCount;
-    final int pageLength = 50;
+    private int currentSearchPagesCount;
+    private final int pageLength = 50;
 
     public void init(int totalHitsCount) {
         currentSearchPagesCount = (int) Math.ceil((double) totalHitsCount / (double) pageLength);

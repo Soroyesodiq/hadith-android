@@ -10,8 +10,6 @@ import java.util.Formatter;
 
 public class BooksTreeService {
 
-	static final String LOG_TAG = "BooksTreeService";
-
 	private SQLiteDatabase db;
 	private SQLiteInstaller sqLiteInstaller;
 
@@ -19,16 +17,10 @@ public class BooksTreeService {
 		sqLiteInstaller = new SQLiteInstaller(context);
 	}
 
-	public BooksTreeService install() throws DatabaseCopyException {
-        sqLiteInstaller.install();
-		return this;
-	}
-
-	public BooksTreeService open() throws SQLException {
+	public void open() throws SQLException {
 		sqLiteInstaller.openDataBase();
 		sqLiteInstaller.close();
 		db = sqLiteInstaller.getReadableDatabase();
-		return this;
 	}
 
 	public void close() {

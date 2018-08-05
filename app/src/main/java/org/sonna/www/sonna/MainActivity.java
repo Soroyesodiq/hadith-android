@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity
 //		implements NavigationView.OnNavigationItemSelectedListener
 {
 
-	protected static final String LOG_TAG = "MainActivity";
-    BooksTreeService booksService;
+	private static final String LOG_TAG = "MainActivity";
+    private BooksTreeService booksService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 		toggle.syncState();
 
 		//install DB
-		SQLiteInstaller db = new SQLiteInstaller(this);
+		SQLiteInstaller sqLiteInstaller = new SQLiteInstaller(this);
 
 //		ProgressDialog hourGlassDlg = new ProgressDialog(this);
 //		hourGlassDlg.setMessage("برجاء الإنتظار");
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 //		hourGlassDlg.show();
 
 		try {
-			db.install();
+			sqLiteInstaller.install();
 		} catch (DatabaseCopyException exception) {
 			Log.e(LOG_TAG, "open >>" + exception.toString());
             showErrorDialogue("خطأ في العمل", "يوجد خطأ في تهيئة العمل علي ملف الأحاديث.", exception);
@@ -341,9 +341,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     // Swipe left and right
-	private float x1, x2;
+	private float x1;
 	public boolean handleSwipeLeftAndRight(MotionEvent event) {
         final int MIN_DISTANCE = 150;
+        float x2;
 		if (findViewById(R.id.listViewTabweeb).getVisibility() == View.VISIBLE) {
 			return super.onTouchEvent(event);
 		}

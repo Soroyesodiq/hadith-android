@@ -2,10 +2,10 @@ package org.sonna.www.sonna.services;
 
 public class BooksTreeNode {
 
-	private String page_id;		//matches sqlite field name
-	private String book_code;	//matches sqlite field name
-	private String title;
-	private String page;
+	final private String page_id;		//matches sqlite field name
+    final private String book_code;	//matches sqlite field name
+    final private String title;
+    final private String page;
 
     BooksTreeNode(String page_id, String book_code, String title, String page) {
         this.page_id = page_id;

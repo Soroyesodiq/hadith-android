@@ -69,12 +69,9 @@ public class SQLiteInstaller extends SQLiteOpenHelper {
 	}
 
 	//Open the database, so we can query it
-	public boolean openDataBase() throws SQLException {
+	public void openDataBase() throws SQLException {
 		String mPath = DB_PATH + DB_NAME;
-		//Log.v("mPath", mPath);
 		mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-		//mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
-		return mDataBase != null;
 	}
 
 	@Override
@@ -95,6 +92,3 @@ public class SQLiteInstaller extends SQLiteOpenHelper {
 	}
 }
 
-//String outFileName = DB_PATH + DB_NAME;
-//File dbFile = new File(outFileName);
-//dbFile.delete();
