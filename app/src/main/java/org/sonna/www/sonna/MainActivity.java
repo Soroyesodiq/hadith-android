@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity
 			showAboutDialogue();
 			return true;
 		} else if (id == R.id.action_exit) {
-
 			finish();
 			//Go phone home
 			Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -283,6 +282,15 @@ public class MainActivity extends AppCompatActivity
 			return; //just do nothing
 		}
 		int totalHitsCount = booksService.getSearchHitsTotalCount("", searchWords);
+
+        //Set Total hits count
+        TextView hitsCountView = (TextView) findViewById(R.id.text_view_hits_count);
+        String countMessage = (totalHitsCount == 0)? "لا توجد نتائج"
+                : String.format("%,d نتيجة", totalHitsCount);
+        hitsCountView.setText(countMessage);
+
+        //FIXME: Font size of list box is too big
+
         paging.init(totalHitsCount);
 		String pagingString = paging.getPagingString(currentSearchPageNumber);
 
@@ -302,7 +310,9 @@ public class MainActivity extends AppCompatActivity
 				R.layout.search_hits_list_view, android.R.id.text1, list);
 		listView.setAdapter(adapter);
 
-        hideKeyboard(view);
+        if(totalHitsCount > 0) {
+            hideKeyboard(view);
+        }
 
 		// ListView Item Click Listener
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -325,7 +335,7 @@ public class MainActivity extends AppCompatActivity
     private void hideKeyboard(View view) {
         InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if(keyboard != null) {
-            keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0); //hide keyboard
+            keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
