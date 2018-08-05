@@ -3,14 +3,12 @@ package org.sonna.www.sonna.services;
 public class BooksTreeNode {
 
 	private String page_id;		//matches sqlite field name
-	private String parent_id;	//matches sqlite field name
 	private String book_code;	//matches sqlite field name
 	private String title;
 	private String page;
 
-    BooksTreeNode(String page_id, String parent_id, String book_code, String title, String page) {
+    BooksTreeNode(String page_id, String book_code, String title, String page) {
         this.page_id = page_id;
-        this.parent_id = parent_id;
         this.book_code = book_code;
         this.title = title;
         this.page = page;
@@ -18,10 +16,6 @@ public class BooksTreeNode {
 
     public String getPage_id() {
 		return page_id;
-	}
-
-	public String getParent_id() {
-		return parent_id;
 	}
 
 	public String getBook_code() {

@@ -305,13 +305,13 @@ public class MainActivity extends AppCompatActivity
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				BooksTreeNode record = curSearchHits.get(position);
+				BooksTreeNode bookNode = curSearchHits.get(position);
 				historyStack.push(curPageId); //is going to change per user click
 				findViewById(R.id.textViewDisplay).setVisibility(View.VISIBLE);
 				findViewById(R.id.listViewTabweeb).setVisibility(View.GONE);
 
 				//searchWords
-				displayContent(record.getBook_code(), record.getPage_id(), searchWords);
+				displayContent(bookNode.getBook_code(), bookNode.getPage_id(), searchWords);
 				DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 				drawer.closeDrawer(GravityCompat.START);
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
