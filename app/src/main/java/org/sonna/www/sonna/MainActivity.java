@@ -268,13 +268,13 @@ public class MainActivity extends AppCompatActivity
 	ArrayList<BooksTreeNode> curSearchHits = new ArrayList<>();
 
 	public void onSearch(View view) {
-		searchDatabase(1);
+		searchDatabase(view, 1);
 	}
 
     SearchPaging paging = new SearchPaging();
     int currentSearchPageNumber;
 
-    public void searchDatabase(int pageNumber) {
+    public void searchDatabase(View view, int pageNumber) {
 		currentSearchPageNumber = pageNumber;
 		EditText searchEditor = (EditText) findViewById(R.id.search_edit_text);
 		final String searchWords = searchEditor.getText().toString();
@@ -301,6 +301,10 @@ public class MainActivity extends AppCompatActivity
 				R.layout.search_hits_list_view, android.R.id.text1, list);
 		listView.setAdapter(adapter);
 
+        //Hide Keyboard
+        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0); //hide keyboard
+
 		// ListView Item Click Listener
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -314,6 +318,7 @@ public class MainActivity extends AppCompatActivity
 				displayContent(bookNode.getBook_code(), bookNode.getPage_id(), searchWords);
 				DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 				drawer.closeDrawer(GravityCompat.START);
+				//Hide keyboard
 				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0); //hide keyboard
 			}
@@ -366,14 +371,14 @@ public class MainActivity extends AppCompatActivity
     public void onSearchNextPage(View view) {
         int newPageNumber = paging.getNextSearchPageNumber(currentSearchPageNumber);
         if(newPageNumber != currentSearchPageNumber) {
-            searchDatabase(newPageNumber);
+            searchDatabase(view, newPageNumber);
         }
     }
 
     public void onSearchPreviousPage(View view) {
         int newPageNumber = paging.getPreviousPageNumber(currentSearchPageNumber);
         if(newPageNumber != currentSearchPageNumber) {
-            searchDatabase(newPageNumber);
+            searchDatabase(view, newPageNumber);
         }
     }
 }
