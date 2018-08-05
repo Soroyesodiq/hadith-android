@@ -284,11 +284,7 @@ public class MainActivity extends AppCompatActivity
 		}
 		int totalHitsCount = booksService.getSearchHitsTotalCount("", searchWords);
 
-        //Set Total hits count
-        TextView hitsCountView = (TextView) findViewById(R.id.text_view_hits_count);
-        String countMessage = (totalHitsCount == 0)? "لا توجد نتائج"
-                : String.format("%,d نتيجة", totalHitsCount);
-        hitsCountView.setText(countMessage);
+        setTotalHitsCountText(totalHitsCount);
 
         //FIXME: Font size of list box is too big
 
@@ -332,6 +328,13 @@ public class MainActivity extends AppCompatActivity
 			}
 		});
 	}
+
+    private void setTotalHitsCountText(int totalHitsCount) {
+        TextView hitsCountView = (TextView) findViewById(R.id.text_view_hits_count);
+        String countMessage = (totalHitsCount == 0)? "لا توجد نتائج"
+                : String.format("%,d نتيجة", totalHitsCount);
+        hitsCountView.setText(countMessage);
+    }
 
     private void hideKeyboard(View view) {
         InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
