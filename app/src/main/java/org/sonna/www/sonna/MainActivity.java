@@ -1,5 +1,6 @@
 package org.sonna.www.sonna;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -175,11 +176,10 @@ public class MainActivity extends AppCompatActivity
 	ArrayList<BooksTreeNode> curRecords = new ArrayList<>();
 	Stack<String> historyStack = new Stack<>();
 
-	protected void displayContent(String book_code, String page_id, String searchWords) {
+	@SuppressLint("ClickableViewAccessibility") // See https://stackoverflow.com/a/46964717/2787593
+    protected void displayContent(String book_code, String page_id, String searchWords) {
 		try {
 			WebView displayTextView = (WebView) findViewById(R.id.textViewDisplay);
-			//FIXME: Warning:(181, 4) Custom view ``WebView`` has `setOnTouchListener` called on it but does not override `performClick`
-            //FIXME: Warning:(183, 20) `onTouch` should call `View#performClick` when a click is detected
 			displayTextView.setOnTouchListener(new View.OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
