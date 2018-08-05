@@ -301,9 +301,7 @@ public class MainActivity extends AppCompatActivity
 				R.layout.search_hits_list_view, android.R.id.text1, list);
 		listView.setAdapter(adapter);
 
-        //Hide Keyboard
-        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0); //hide keyboard
+        hideKeyboard(view);
 
 		// ListView Item Click Listener
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -318,14 +316,19 @@ public class MainActivity extends AppCompatActivity
 				displayContent(bookNode.getBook_code(), bookNode.getPage_id(), searchWords);
 				DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 				drawer.closeDrawer(GravityCompat.START);
-				//Hide keyboard
-				InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0); //hide keyboard
+                hideKeyboard(view);
 			}
 		});
 	}
 
-	// Swipe left and right
+    private void hideKeyboard(View view) {
+        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(keyboard != null) {
+            keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0); //hide keyboard
+        }
+    }
+
+    // Swipe left and right
 	private float x1, x2;
 	public boolean handleSwipeLeftAndRight(MotionEvent event) {
         final int MIN_DISTANCE = 150;
