@@ -263,7 +263,6 @@ public class MainActivity extends AppCompatActivity
 		alertDialog.show();
 	}
 
-	ArrayList<BooksTreeNode> curSearchHits = new ArrayList<>();
 
 	public void onSearch(View view) {
 		searchDatabase(view, 1);
@@ -273,7 +272,7 @@ public class MainActivity extends AppCompatActivity
     int currentSearchPageNumber;
 
     public void searchDatabase(View view, int pageNumber) {
-		currentSearchPageNumber = pageNumber;
+        currentSearchPageNumber = pageNumber;
 		EditText searchEditor = (EditText) findViewById(R.id.search_edit_text);
 		final String searchWords = searchEditor.getText().toString();
 		if (searchWords.trim().length() == 0) {
@@ -293,7 +292,7 @@ public class MainActivity extends AppCompatActivity
         pagingTextView.setText(Html.fromHtml(pagingString));
 
 		ArrayList<BooksTreeNode> hits = booksService.search(searchWords, paging.getPageLength(), pageNumber);
-		curSearchHits.clear();
+        final ArrayList<BooksTreeNode> curSearchHits = new ArrayList<>();
 		final ArrayList<String> list = new ArrayList<>();
 		for (BooksTreeNode record : hits) {
 			list.add(record.getTitle());
