@@ -34,6 +34,7 @@ import org.sonna.www.sonna.services.SearchPaging;
 import org.sonna.www.sonna.services.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Stack;
 
 import org.sonna.www.sonna.services.DatabaseCopyException;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_main);
 
-//        Right button of dots
+        //Right button of dots
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
@@ -62,10 +63,7 @@ public class MainActivity extends AppCompatActivity
 		drawer.setDrawerListener(toggle);
 		toggle.syncState();
 
-        /////////////////////////////////////////////////////////////
 		//install DB
-
-		//FIXME: Use this instead of getting Context because activity is already extends Context
 		SQLiteInstaller db = new SQLiteInstaller(this);
 
 //		ProgressDialog hourGlassDlg = new ProgressDialog(this);
@@ -265,7 +263,6 @@ public class MainActivity extends AppCompatActivity
 		alertDialog.show();
 	}
 
-	//Seems search can has its own class
 	ArrayList<BooksTreeNode> curSearchHits = new ArrayList<>();
 
 	public void onSearch(View view) {
@@ -332,7 +329,7 @@ public class MainActivity extends AppCompatActivity
     private void setTotalHitsCountText(int totalHitsCount) {
         TextView hitsCountView = (TextView) findViewById(R.id.text_view_hits_count);
         String countMessage = (totalHitsCount == 0)? "لا توجد نتائج"
-                : String.format("%,d نتيجة", totalHitsCount);
+                : String.format(Locale.US, "%,d نتيجة", totalHitsCount);
         hitsCountView.setText(countMessage);
     }
 

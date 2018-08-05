@@ -6,8 +6,9 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:src="@mipmap/background"
-    />
+    android:contentDescription="المكنز الإسلامي - جامعة الأزهر - مراجعة مجمع البحوث الإسلامية" />
 
     <!--android:src="@drawable/ic_about_sonna_image"-->
     <!--android:layout_gravity="center_horizontal"-->
     <!--android:foregroundGravity="top"-->
+
