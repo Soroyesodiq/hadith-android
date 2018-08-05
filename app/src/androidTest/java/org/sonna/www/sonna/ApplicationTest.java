@@ -14,7 +14,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 	}
 
 	@Test
-	public void addition_isCorrect() throws Exception {
+	public void addition_isCorrect() {
 		assertEquals(4, 5);
 		System.out.print("Hello world!");
 	}
