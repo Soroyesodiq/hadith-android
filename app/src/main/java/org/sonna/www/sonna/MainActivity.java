@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         //Right button of dots
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -66,20 +66,12 @@ public class MainActivity extends AppCompatActivity
 		//install DB
 		SQLiteInstaller sqLiteInstaller = new SQLiteInstaller(this);
 
-//		ProgressDialog hourGlassDlg = new ProgressDialog(this);
-//		hourGlassDlg.setMessage("برجاء الإنتظار");
-//		hourGlassDlg.setIndeterminate(true);
-//		hourGlassDlg.setCancelable(false);
-//		hourGlassDlg.show();
-
 		try {
 			sqLiteInstaller.install();
 		} catch (DatabaseCopyException exception) {
 			Log.e(LOG_TAG, "open >>" + exception.toString());
             showErrorDialogue("خطأ في العمل", "يوجد خطأ في تهيئة العمل علي ملف الأحاديث.", exception);
 		}
-
-//		hourGlassDlg.hide();
 
 		//Open DB and display initial view
 		booksService = new BooksTreeService(this);
@@ -145,8 +137,6 @@ public class MainActivity extends AppCompatActivity
 
 		return super.onOptionsItemSelected(item);
 	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void displayPreviousContents() {
 		String page_id = historyStack.pop();
@@ -263,7 +253,6 @@ public class MainActivity extends AppCompatActivity
 		alertDialog.show();
 	}
 
-
 	public void onSearch(View view) {
 		searchDatabase(view, 1);
 	}
@@ -274,56 +263,54 @@ public class MainActivity extends AppCompatActivity
     public void searchDatabase(View view, int pageNumber) {
         currentSearchPageNumber = pageNumber;
 		EditText searchEditor = (EditText) findViewById(R.id.search_edit_text);
-		final String searchWords = searchEditor.getText().toString();
+		String searchWords = searchEditor.getText().toString();
 		if (searchWords.trim().length() == 0) {
 			return; //just do nothing
 		}
-		int totalHitsCount = booksService.getSearchHitsTotalCount("", searchWords);
+
+        //Lengthy Search Task
+        SearchAsyncTask searchTask = new SearchAsyncTask(this, view);
+        searchTask.execute(searchWords, pageNumber, paging.getPageLength(), booksService);
+
+    }
+
+    public void updateSearchControls(View view, final String queryWords, ArrayList<String> list, final ArrayList<BooksTreeNode> curSearchHits, int totalHitsCount) {
+        final String searchWords = queryWords;
+        paging.init(totalHitsCount);
+        String pagingString = paging.getPagingString(currentSearchPageNumber);
+
+        //set text in between next and prev
+        TextView pagingTextView = (TextView) findViewById(R.id.text_view_paging);
+        pagingTextView.setText(Html.fromHtml(pagingString));
 
         setTotalHitsCountText(totalHitsCount);
 
-        //FIXME: Font size of list box is too big
-
-        paging.init(totalHitsCount);
-		String pagingString = paging.getPagingString(currentSearchPageNumber);
-
-        //set text in between next and prev
-		TextView pagingTextView = (TextView) findViewById(R.id.text_view_paging);
-        pagingTextView.setText(Html.fromHtml(pagingString));
-
-		ArrayList<BooksTreeNode> hits = booksService.search(searchWords, paging.getPageLength(), pageNumber);
-        final ArrayList<BooksTreeNode> curSearchHits = new ArrayList<>();
-		final ArrayList<String> list = new ArrayList<>();
-		for (BooksTreeNode record : hits) {
-			list.add(record.getTitle());
-			curSearchHits.add(record);
-		}
-		ListView listView = (ListView) findViewById(R.id.listView_search_hits);
-		ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-				R.layout.search_hits_list_view, android.R.id.text1, list);
-		listView.setAdapter(adapter);
+        ListView listView = (ListView) findViewById(R.id.listView_search_hits);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                R.layout.search_hits_list_view, android.R.id.text1, list);
+        listView.setAdapter(adapter);
 
         if(totalHitsCount > 0) {
             hideKeyboard(view);
         }
 
-		// ListView Item Click Listener
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				BooksTreeNode bookNode = curSearchHits.get(position);
-				historyStack.push(curPageId); //is going to change per user click
-				findViewById(R.id.textViewDisplay).setVisibility(View.VISIBLE);
-				findViewById(R.id.listViewTabweeb).setVisibility(View.GONE);
+        // ListView Item Click Listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BooksTreeNode bookNode = curSearchHits.get(position);
+                historyStack.push(curPageId); //is going to change per user click
+                findViewById(R.id.textViewDisplay).setVisibility(View.VISIBLE);
+                findViewById(R.id.listViewTabweeb).setVisibility(View.GONE);
 
-				//searchWords
-				displayContent(bookNode.getBook_code(), bookNode.getPage_id(), searchWords);
-				DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-				drawer.closeDrawer(GravityCompat.START);
+                //searchWords
+                displayContent(bookNode.getBook_code(), bookNode.getPage_id(), searchWords);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
                 hideKeyboard(view);
-			}
-		});
-	}
+            }
+        });
+    }
 
     private void setTotalHitsCountText(int totalHitsCount) {
         TextView hitsCountView = (TextView) findViewById(R.id.text_view_hits_count);
