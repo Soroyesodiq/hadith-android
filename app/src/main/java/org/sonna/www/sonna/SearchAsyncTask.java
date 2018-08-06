@@ -56,7 +56,6 @@ public class SearchAsyncTask extends AsyncTask<Object, Void, String> {
         ArrayList<BooksTreeNode> hits = booksService.search(searchWords, pageLength, pageNumber);
 
         for (BooksTreeNode record : hits) {
-            //FIXME: remove list as it can be deducted from curSearchHits
             list.add(TextUtils.removeTrailingDot(record.getTitle()));
             curSearchHits.add(record);
         }
