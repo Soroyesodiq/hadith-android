@@ -23,10 +23,10 @@
     <!--app:headerLayout="@layout/nav_header_main"-->
     <!--app:menu="@menu/activity_main_drawer"/>-->
 
-    <!--wrap_content-->
+    <!--android:id="@+id/linearLayout"-->
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/linearLayout"
+        android:id="@+id/searchConstraintLayout"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -38,13 +38,13 @@
         <EditText
             android:id="@+id/search_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:hint="أدخل كلمات البحث"
+            android:layout_height="wrap_content"
+            android:hint=""
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="20dp"
+            android:layout_marginTop="8dp"
+            />
 
         <TextView
             android:id="@+id/text_view_hits_count"
@@ -55,7 +55,7 @@
             android:layout_marginTop="20dp"
             android:paddingLeft="6dip"
             android:paddingRight="6dip"
-            android:text="عدد النتائج"
+            android:text="لا توجد نتائج"
             app:layout_constraintEnd_toStartOf="@+id/mysearch_button"
             app:layout_constraintTop_toBottomOf="@+id/search_edit_text"
             tools:layout_conversion_absoluteHeight="19dp"
@@ -97,60 +97,57 @@
         <ListView
             android:id="@+id/listView_search_hits"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:choiceMode="singleChoice"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/next_search_button"
             app:layout_constraintTop_toBottomOf="@+id/mysearch_button"
             tools:layout_editor_absoluteX="0dp" />
 
         <!--PAGING-->
 
 
-
-
         <Button
             android:id="@+id/next_search_button"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:onClick="onSearchPreviousPage"
             android:text="&lt;"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listView_search_hits" />
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            tools:layout_editor_absoluteX="8dp" />
 
 
         <TextView
             android:id="@+id/text_view_paging"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
             android:text="الصفحات"
-            app:layout_constraintStart_toEndOf="@+id/next_search_button"
-            app:layout_constraintTop_toBottomOf="@+id/listView_search_hits" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/next_search_button" />
 
 
         <Button
             android:id="@+id/prev_search_button"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:onClick="onSearchNextPage"
             android:text="&gt;"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/text_view_paging"
-            app:layout_constraintTop_toBottomOf="@+id/listView_search_hits" />
+            />
 
 
     </android.support.constraint.ConstraintLayout>
