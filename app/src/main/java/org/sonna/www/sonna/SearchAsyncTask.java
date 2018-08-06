@@ -6,6 +6,7 @@ import android.view.View;
 
 import org.sonna.www.sonna.services.BooksTreeNode;
 import org.sonna.www.sonna.services.BooksTreeService;
+import org.sonna.www.sonna.services.TextUtils;
 
 import java.util.ArrayList;
 
@@ -56,7 +57,7 @@ public class SearchAsyncTask extends AsyncTask<Object, Void, String> {
 
         for (BooksTreeNode record : hits) {
             //FIXME: remove list as it can be deducted from curSearchHits
-            list.add(record.getTitle());
+            list.add(TextUtils.removeTrailingDot(record.getTitle()));
             curSearchHits.add(record);
         }
 
