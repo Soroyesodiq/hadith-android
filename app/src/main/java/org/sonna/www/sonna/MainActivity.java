@@ -184,6 +184,12 @@ public class MainActivity extends AppCompatActivity
 				}
 			});
 			ArrayList<BooksTreeNode> records = booksService.findNode(book_code, page_id);
+
+            //IF END OF BOOK REACHED
+            if(records.size() == 0) {
+                return; // DO NO THING
+            }
+
 			if (records.size() != 1) {
 				emptyDisplay(displayTextView);
 
