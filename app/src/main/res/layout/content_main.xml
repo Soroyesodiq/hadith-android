@@ -20,7 +20,7 @@
         android:layout_gravity="bottom|top"
         android:layout_weight="0.06"
         android:choiceMode="singleChoice"
-        android:clickable="false"
+        android:clickable="true"
         android:drawSelectorOnTop="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -37,8 +37,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:visibility="gone"
-        android:fontFamily="Traditional Arabic"
-        android:textSize="18sp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="1dp"
         android:layout_marginLeft="1dp"
@@ -46,3 +44,10 @@
 
 
 </RelativeLayout>
+
+
+    <!--android:fontFamily="Traditional Arabic"-->
+    <!--android:textSize="18sp"-->
+
+    <!--app:fontFamily="Traditional Arabic"-->
+
