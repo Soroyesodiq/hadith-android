@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
 
 	private static final String LOG_TAG = "MainActivity";
     private BooksTreeService booksService;
+    TextUtils textUtils = new TextUtils();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +133,14 @@ public class MainActivity extends AppCompatActivity
                 intent.addCategory(Intent.CATEGORY_HOME);
                 startActivity(intent);
                 return true;
-
+            case R.id.nav_normal_font:
+                textUtils.setFontNormal();
+                displayContent(curBookCode, curPageId, curSearchWords);
+                return true;
+            case R.id.nav_large_font:
+                textUtils.setFontLarge();
+                displayContent(curBookCode, curPageId, curSearchWords);
+                return true;
         }
 
 		return super.onOptionsItemSelected(item);
@@ -160,13 +168,14 @@ public class MainActivity extends AppCompatActivity
 		display.loadData("", "text/html; charset=UTF-8", null);
 	}
 
-	String curBookCode = "", curPageId = "";
+	String curBookCode = "", curPageId = "", curSearchWords = "";
 	ArrayList<BooksTreeNode> curRecords = new ArrayList<>();
 	Stack<String> historyStack = new Stack<>();
 
 	@SuppressLint("ClickableViewAccessibility") // See https://stackoverflow.com/a/46964717/2787593
     protected void displayContent(String book_code, String page_id, String searchWords) {
 		try {
+            curSearchWords = searchWords;
 			WebView displayTextView = (WebView) findViewById(R.id.textViewDisplay);
 			displayTextView.setOnTouchListener(new View.OnTouchListener() {
 				@Override
@@ -181,7 +190,7 @@ public class MainActivity extends AppCompatActivity
 			} else {
 				BooksTreeNode record = records.get(0);
 				String content = record.getPage();
-				String htmlContent = TextUtils.decorate(searchWords, record.getTitle(), content);
+				String htmlContent = textUtils.decorate(searchWords, record.getTitle(), content);
 				displayTextView.loadData(htmlContent, "text/html; charset=UTF-8", null);
 				curBookCode = record.getBook_code();
 				curPageId = record.getPage_id();

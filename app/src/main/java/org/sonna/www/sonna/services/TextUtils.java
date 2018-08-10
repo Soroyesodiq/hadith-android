@@ -4,6 +4,20 @@ import android.support.annotation.NonNull;
 
 public class TextUtils {
 
+    enum FontSize {
+        NORMAL, LARGE
+    }
+
+    private FontSize fontSize = FontSize.NORMAL;
+
+    public void setFontLarge() {
+        fontSize = FontSize.LARGE;
+    }
+
+    public void setFontNormal() {
+        fontSize = FontSize.NORMAL;
+    }
+
     private static String addVowels(String arabic) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < arabic.length(); i++) {
@@ -29,15 +43,19 @@ public class TextUtils {
         return bodyString;
     }
 
-
     @NonNull
-    public static String decorate(@NonNull String searchWords, @NonNull String title, @NonNull String content) {
+    public String decorate(@NonNull String searchWords, @NonNull String title, @NonNull String content) {
 
         content = content.trim();
         content = removeTrailingHashes(content);
         content = content.trim();
 
-        final String htmlPagePrefix = "<html><body style='direction: rtl; text-align:justify; align-content: right;  text-align=right'><span align='right'>";
+        //FIXME: Use StringBuilder
+
+        String fontSizeStyle = (fontSize == FontSize.LARGE)? " font-size: 150%; " : "";
+
+        String head = "<head><style>@font-face {font-family: 'trado';src: url('file:///android_asset/fonts/trado.ttf');}body {font-family: 'trado';}</style></head>";
+        final String htmlPagePrefix = "<html>" + head + "<body style='font-family: trado; direction: rtl; text-align:justify; align-content: right;  text-align=right;" + fontSizeStyle + "'><span align='right'>";
         final String htmlPagePostfix = "</span></body><html>";
 
         content = content.replaceAll("##", "<br><hr>");
