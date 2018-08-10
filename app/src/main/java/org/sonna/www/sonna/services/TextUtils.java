@@ -37,7 +37,7 @@ public class TextUtils {
             word = word.trim();
             if (word.length() > 0) {
                 String processedWord = addVowels(word);
-                bodyString = bodyString.replaceAll("(" + processedWord + ")", spanStart + "$1" + spanEnd);
+                bodyString = bodyString.replaceAll("(\\b" + processedWord + "\\b)", spanStart + "$1" + spanEnd);
             }
         }
         return bodyString;

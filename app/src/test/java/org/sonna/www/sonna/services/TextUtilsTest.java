@@ -18,6 +18,12 @@ public class TextUtilsTest {
 		assertEquals(textHighlighted, TextUtils.highlight(text, "ellah"));
 	}
 
+    @Test
+    public void testSearchHighlightSubstring() {
+        String text =  "besm ellah ";
+        String textHighlighted = "besm ellah ";
+        assertEquals(textHighlighted, TextUtils.highlight(text, "ella"));
+    }
 
 	@Test
 	public void testTrimTrailingHashes() {
@@ -31,7 +37,7 @@ public class TextUtilsTest {
 
 		final String content = "word1 word2 word3";
 		final String content2 = "word1 |word2| word3";
-		String newString = content.replaceAll("(word2)", "<$1>");
+		String newString = content.replaceAll("(word2)", "|$1|");
 		assertEquals(newString, content2);
 
 	}
