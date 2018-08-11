@@ -51,12 +51,15 @@ public class TextUtils {
         content = content.trim();
 
         //FIXME: Use StringBuilder
-
-        String fontSizeStyle = (fontSize == FontSize.LARGE)? " font-size: 150%; " : "";
-
-        String head = "<head><style>@font-face {font-family: 'trado';src: url('file:///android_asset/fonts/trado.ttf');}body {font-family: 'trado';}</style></head>";
-        final String htmlPagePrefix = "<html>" + head + "<body style='font-family: trado; direction: rtl; text-align:justify; align-content: right;  text-align=right;" + fontSizeStyle + "'><span align='right'>";
-        final String htmlPagePostfix = "</span></body><html>";
+        //FIXME: Use HTML templates
+        String fontSizeStyle = (fontSize == FontSize.LARGE)? " font-size: 150%; " : " font-size: 110%; ";
+        String font = "@font-face {font-family: 'custom';src: url('fonts/Amiri-Regular.ttf');} ";
+        String style = "<style>" + font + " body {font-family: 'custom'; direction: rtl; "
+                + "text-align:justify; align-content: right;  text-align=right;"
+                + fontSizeStyle + "}</style>";
+        String head = "<head>" + style + "</head>";
+        final String htmlPagePrefix = "<html>" + head + "<body>";
+        final String htmlPagePostfix = "</body></html>";
 
         content = content.replaceAll("##", "<br><hr>");
         content = content.replaceAll("\n", "<br>");

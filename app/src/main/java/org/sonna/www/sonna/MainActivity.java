@@ -197,7 +197,9 @@ public class MainActivity extends AppCompatActivity
 				BooksTreeNode record = records.get(0);
 				String content = record.getPage();
 				String htmlContent = textUtils.decorate(searchWords, record.getTitle(), content);
-				displayTextView.loadData(htmlContent, "text/html; charset=UTF-8", null);
+//				displayTextView.loadData(htmlContent, "text/html; charset=UTF-8", null);
+                displayTextView.loadDataWithBaseURL("file:///android_asset/",
+                        htmlContent, "text/html", "UTF-8", null);
 				curBookCode = record.getBook_code();
 				curPageId = record.getPage_id();
 			}
