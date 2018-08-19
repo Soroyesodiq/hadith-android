@@ -18,6 +18,11 @@ public class TextUtils {
         fontSize = FontSize.NORMAL;
     }
 
+    public String getFontSize() {
+        if(fontSize == FontSize.NORMAL) return "normal";
+        return "large";
+    }
+
     private static String addVowels(String arabic) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < arabic.length(); i++) {

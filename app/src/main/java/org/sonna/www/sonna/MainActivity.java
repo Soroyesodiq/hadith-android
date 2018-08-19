@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -77,16 +78,66 @@ public class MainActivity extends AppCompatActivity
 		//Open DB and display initial view
 		booksService = new BooksTreeService(this);
 		booksService.open();
-		displayKids("", "");
+		//displayKids("", "");
+        displayLastViewedPage();
 	}
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
+        savePreferences();
 		booksService.close();
+		super.onDestroy();
 	}
 
-	@Override
+    final String MY_PREFS_NAME = "Hadith";
+
+    private void savePreferences() {
+        boolean isLeaf = booksService.isLeafNode(curBookCode, curPageId);
+        SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putBoolean("is_leaf", isLeaf);
+        editor.putString("book_code", curBookCode);
+        editor.putString("page_id", curPageId);
+        editor.putString("font_size", textUtils.getFontSize());
+        editor.apply();
+    }
+
+    public void displayLastViewedPage() {
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        String bookCode = prefs.getString("book_code", "");
+        String pageId =   prefs.getString("page_id", "");
+        boolean isLeaf = prefs.getBoolean("is_leaf", false);
+        String fontSize = prefs.getString("font_size", "normal");
+        if (fontSize.equals("normal")) {
+            textUtils.setFontNormal();
+        } else {
+            textUtils.setFontLarge();
+        }
+
+        if(isLeaf) {
+            setDisplayModeToHtml();
+            displayContent(bookCode, pageId, "");
+        }
+        else {
+            setDisplayModeToList();
+            displayKids(bookCode, pageId);
+        }
+    }
+
+    public void setDisplayModeToHtml() {
+        WebView display = (WebView) findViewById(R.id.textViewDisplay);
+        ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
+        display.setVisibility(View.VISIBLE);
+        tabweeb.setVisibility(View.GONE);
+    }
+
+    public void setDisplayModeToList() {
+        WebView display = (WebView) findViewById(R.id.textViewDisplay);
+        ListView tabweeb = (ListView) findViewById(R.id.listViewTabweeb);
+        display.setVisibility(View.GONE);
+        tabweeb.setVisibility(View.VISIBLE);
+    }
+
+    @Override
 	public void onBackPressed() {
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		if (drawer.isDrawerOpen(GravityCompat.START)) {
