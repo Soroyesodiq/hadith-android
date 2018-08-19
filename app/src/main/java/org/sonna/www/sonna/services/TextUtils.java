@@ -57,8 +57,9 @@ public class TextUtils {
 
         //FIXME: Use StringBuilder
         //FIXME: Use HTML templates
-        String fontSizeStyle = (fontSize == FontSize.LARGE)? " font-size: 150%; " : " font-size: 110%; ";
-        String font = "@font-face {font-family: 'custom';src: url('fonts/Amiri-Regular.ttf');} ";
+        String fontSizeStyle = (fontSize == FontSize.LARGE)? " font-size: 170%; " : " font-size: 130%; ";
+//        String font = "@font-face {font-family: 'custom';src: url('fonts/Amiri-Regular.ttf');} ";
+        String font = "@font-face {font-family: 'custom';src: url('fonts/trado.ttf');} ";
         String style = "<style>" + font + " body {font-family: 'custom'; direction: rtl; "
                 + "text-align:justify; align-content: right;  text-align=right;"
                 + fontSizeStyle + "}</style>";
