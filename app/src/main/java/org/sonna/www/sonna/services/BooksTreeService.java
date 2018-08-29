@@ -7,11 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.HashMap;
 
 public class BooksTreeService {
 
 	private SQLiteDatabase db;
 	private SQLiteInstaller sqLiteInstaller;
+    private HashMap<String, Integer> bookSize = new HashMap<>(); 
 
 	public BooksTreeService(Context context) {
 		sqLiteInstaller = new SQLiteInstaller(context);
@@ -21,6 +23,23 @@ public class BooksTreeService {
 		sqLiteInstaller.openDataBase();
 		sqLiteInstaller.close();
 		db = sqLiteInstaller.getReadableDatabase();
+        
+        //select count(*) from pages where book_code="g2b01";
+        //select count(*) from pages where parent_id="NO_PARENT";
+        //12 books 
+        //Hardcoded here to enhance androips app performance
+        bookSize.put("g2b1", 11862);   //
+        bookSize.put("g2b2", 9162);    //
+        bookSize.put("g2b3", 6712);    //6693
+        bookSize.put("g2b4", 8366);    //8345
+        bookSize.put("g2b5", 7203);    //7189
+        bookSize.put("g2b6", 6059);    //6046
+        bookSize.put("g2b7", 2625);    //2619
+        bookSize.put("g2b8", 29759);   //29695
+        bookSize.put("g2b9", 4962);    //4937
+        bookSize.put("g2b10", 5202);    //5192
+        bookSize.put("g2b11", 1544);    //1541
+        bookSize.put("g2b12", 26668);   //26607
 	}
 
 	public void close() {
@@ -68,7 +87,10 @@ public class BooksTreeService {
 	}
 
 	public boolean isLeafNode(String book_code, String page_id) {
-		String sql = "SELECT * FROM pages where pages MATCH ?";
+
+	    if(book_code.isEmpty()) return false;
+
+	    String sql = "SELECT * FROM pages where pages MATCH ?";
 		String param = new Formatter().format("book_code:%s parent_id:%s", book_code, page_id).toString();
 		String[] args = new String[]{param};
 		Cursor cursor = db.rawQuery(sql, args);
@@ -118,5 +140,29 @@ public class BooksTreeService {
 		}
 		return count;
 	}
+
+    public String getNextHadithId(String curBookCode, String curPageId) {
+        int nextId = Integer.parseInt(curPageId);
+        if(nextId + 1 < bookSize.get(curBookCode)) nextId++;
+        ArrayList<BooksTreeNode> nodes = new ArrayList<>();
+        do {
+            nodes = findNode(curBookCode, String.valueOf(nextId));
+            if(nodes.size() > 0) return String.valueOf(nextId);
+            nextId++;
+        } while (nodes.size() == 0 && nextId < bookSize.get(curBookCode));
+        return curPageId;
+    }
+
+   public String getPreviousHadithId(String curBookCode, String curPageId) {
+        int previousId = Integer.parseInt(curPageId);
+        if(previousId - 1 > -1) previousId--;
+        ArrayList<BooksTreeNode> nodes = new ArrayList<>();
+        do {
+            nodes = findNode(curBookCode, String.valueOf(previousId));
+            if(nodes.size() > 0) return String.valueOf(previousId);
+            previousId--;
+        } while (nodes.size() == 0 && previousId > 0);
+        return curBookCode;
+    }
 
 }

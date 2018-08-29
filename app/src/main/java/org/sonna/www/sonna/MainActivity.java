@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -81,6 +82,11 @@ public class MainActivity extends AppCompatActivity
 		//displayKids("", "");
         displayLastViewedPage();
 	}
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
 	@Override
 	protected void onDestroy() {
@@ -371,6 +377,10 @@ public class MainActivity extends AppCompatActivity
                 findViewById(R.id.textViewDisplay).setVisibility(View.VISIBLE);
                 findViewById(R.id.listViewTabweeb).setVisibility(View.GONE);
 
+                //FIXME: As book can be displayed as a leaf text and as a List of abwab, I should
+                //create a mode that expeicity says ListView of HTMLView for saving state to work
+                // correctly.
+
                 //searchWords
                 displayContent(bookNode.getBook_code(), bookNode.getPage_id(), searchWords);
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -411,17 +421,25 @@ public class MainActivity extends AppCompatActivity
 				float deltaX = x2 - x1;
 				if (Math.abs(deltaX) > MIN_DISTANCE) {
 					if (x2 > x1) { // Left to Right swipe action : NEXT
-						displayContent(curBookCode, String.valueOf(Integer.parseInt(curPageId) + 1), "");
+						displayNextHadith();
 					} else {  // Right to left swipe action: PREVIOUS
-						if (Integer.parseInt(curPageId) > 1) {
-							displayContent(curBookCode, String.valueOf(Integer.parseInt(curPageId) - 1), "");
-						}
+		                displayPreviousHadith();   				
 					}
 				}
 				break;
 		}
 		return super.onTouchEvent(event);
 	}
+
+    void displayNextHadith() {
+        String nextId = booksService.getNextHadithId(curBookCode, curPageId);
+        if( ! nextId.equals(curPageId)) displayContent(curBookCode, nextId, "");
+    }
+
+    void displayPreviousHadith() {
+        String previousId = booksService.getPreviousHadithId(curBookCode, curPageId); 
+        if( ! previousId.equals(curPageId)) displayContent(curBookCode, previousId, "");
+    }
 
 	void showAboutDialogue() {
 		AlertDialog.Builder aboutAlert = new AlertDialog.Builder(

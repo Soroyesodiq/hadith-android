@@ -67,7 +67,10 @@ public class TextUtils {
         final String htmlPagePrefix = "<html>" + head + "<body>";
         final String htmlPagePostfix = "</body></html>";
 
-        content = content.replaceAll("##", "<br><hr>");
+        content = content.trim();
+
+        content = content.replaceAll("\\$", "<br><hr>");
+
         content = content.replaceAll("\n", "<br>");
         if(searchWords.trim().length() > 0) { //highlight search text
             content = TextUtils.highlight(content, searchWords);
@@ -80,7 +83,7 @@ public class TextUtils {
 
     @NonNull
     public static String removeTrailingHashes(@NonNull String content) {
-        if(content.charAt(content.length()-1) == '#') {
+        if(content.charAt(content.length()-1) == '$') {
             return content.substring(0, content.length()-2);
         }
         return content;
